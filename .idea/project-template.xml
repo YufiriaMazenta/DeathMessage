@@ -1,0 +1,3 @@
+<template>
+  <input-field default="com.mingxin">IJ_BASE_PACKAGE</input-field>
+</template>

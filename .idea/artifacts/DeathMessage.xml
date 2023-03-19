@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="DeathMessage">
+    <output-path>$PROJECT_DIR$/../../purpur-1.19/plugins</output-path>
+    <root id="archive" name="DeathMessage.jar">
+      <element id="module-output" name="DeathMessage" />
+    </root>
+  </artifact>
+</component>
