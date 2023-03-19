@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="purpur-1.19.2">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/libs/purpur-1.19.2.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>
