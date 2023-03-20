@@ -6,6 +6,8 @@ import com.mingxin.util.NmsUtil;
 import net.md_5.bungee.api.chat.*;
 import net.md_5.bungee.api.chat.hover.content.Item;
 import net.md_5.bungee.api.chat.hover.content.Text;
+import net.minecraft.network.chat.ComponentContents;
+import net.minecraft.network.chat.IChatBaseComponent;
 import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.server.level.EntityPlayer;
 import net.minecraft.world.damagesource.CombatTracker;
@@ -30,8 +32,9 @@ public enum DeathHandler implements Listener {
 
     INSTANCE;
 
-    private Field entityField;
+    private Field entityField, deathCauseKeyField, combatTrackerField;
     private final Map<UUID, UUID> entityHurtPlayerMap;
+    private Method toChatMethod, getComponentContentsMethod, getObjsMethod;
 
     DeathHandler() {
         try {
@@ -58,27 +61,77 @@ public enum DeathHandler implements Listener {
         int objArrNum = 1;
         if (entityPlayer != null) {
             CombatTracker tracker = null;
-            for (Field field : entityPlayer.getClass().getSuperclass().getSuperclass().getFields()) {
-                if (field.getType().equals(CombatTracker.class)) {
-                    try {
-                        tracker = (CombatTracker) field.get(entityPlayer);
-                    } catch (IllegalAccessException e) {
-                        e.printStackTrace();
+            if (combatTrackerField == null) {
+                for (Field field : entityPlayer.getClass().getSuperclass().getSuperclass().getFields()) {
+                    if (field.getType().equals(CombatTracker.class)) {
+                        combatTrackerField = field;
+                        break;
                     }
                 }
             }
-            TranslatableContents message = (TranslatableContents) tracker.b().b();//get combatTracker then get deathMessage(ChatMessage)
-            deathCause = message.a();//get key
+            try {
+                tracker = (CombatTracker) combatTrackerField.get(entityPlayer);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
 
-            Method objsMethod = null;
-            for (Method method : message.getClass().getMethods()) {
-                if (method.getReturnType().equals(Object[].class)) {
-                    objsMethod = method;
-                    break;
+            if (toChatMethod == null) {
+                for (Method method : CombatTracker.class.getMethods()) {
+                    if (method.getReturnType().equals(IChatBaseComponent.class)) {
+                        toChatMethod = method;
+                        break;
+                    }
+                }
+            }
+
+            IChatBaseComponent baseComponent = null;
+            try {
+                baseComponent = (IChatBaseComponent) toChatMethod.invoke(tracker);
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                e.printStackTrace();
+            }
+            if (getComponentContentsMethod == null) {
+                for (Method method : IChatBaseComponent.class.getMethods()) {
+                    if (method.getReturnType().equals(ComponentContents.class)) {
+                        getComponentContentsMethod = method;
+                        break;
+                    }
+                }
+            }
+
+            TranslatableContents message = null;
+            try {
+                message = (TranslatableContents) getComponentContentsMethod.invoke(baseComponent);//get combatTracker then get deathMessage(ChatMessage)
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                e.printStackTrace();
+            }
+
+            if (deathCauseKeyField == null) {
+                for (Field field : TranslatableContents.class.getDeclaredFields()) {
+                    if (field.getType().equals(String.class)) {
+                        deathCauseKeyField = field;
+                        break;
+                    }
+                }
+            }
+            deathCauseKeyField.setAccessible(true);
+            try {
+                deathCause = (String) deathCauseKeyField.get(message);
+            } catch (IllegalAccessException e) {
+                deathCause = "death.attack.generic";
+                e.printStackTrace();
+            }
+
+            if (getObjsMethod == null) {
+                for (Method method : message.getClass().getMethods()) {
+                    if (method.getReturnType().equals(Object[].class)) {
+                        getObjsMethod = method;
+                        break;
+                    }
                 }
             }
             try {
-                Object[] objects = (Object[]) objsMethod.invoke(message);
+                Object[] objects = (Object[]) getObjsMethod.invoke(message);
                 objArrNum = objects.length;
             } catch (IllegalAccessException | InvocationTargetException e) {
                 e.printStackTrace();
