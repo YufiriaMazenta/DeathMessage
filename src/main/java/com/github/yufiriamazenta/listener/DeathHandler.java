@@ -13,9 +13,7 @@ import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.server.level.EntityPlayer;
 import net.minecraft.world.damagesource.CombatTracker;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -208,7 +206,13 @@ public enum DeathHandler implements Listener {
     @EventHandler
     public void onPlayerHurtByEntity(EntityDamageByEntityEvent event) {
         if (event.getEntity() instanceof Player player) {
-            entityHurtPlayerMap.put(player.getUniqueId(), event.getDamager().getUniqueId());
+            Entity entity = event.getDamager();
+            if (entity instanceof Projectile) {
+                if (((Projectile) entity).getShooter() instanceof Mob mob) {
+                    entity = mob;
+                }
+            }
+            entityHurtPlayerMap.put(player.getUniqueId(), entity.getUniqueId());
         }
     }
 
