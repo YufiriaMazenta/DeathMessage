@@ -97,16 +97,22 @@ public enum DeathHandler implements Listener {
             if (deadPlayer.getKiller() != null) {
                 objList.add(new TextComponent(deadPlayer.getKiller().getDisplayName()));
             } else {
-                Entity lastEntity = Bukkit.getEntity(entityHurtPlayerMap.get(deadPlayer.getUniqueId()));
-                if (lastEntity == null) {
-                    objList.add("null");
+                UUID lastEntityUuid = entityHurtPlayerMap.get(deadPlayer.getUniqueId());
+                if (lastEntityUuid == null) {
+                    String bedRespawnPoint = DataContainer.getMessage("bedRespawnPoint");
+                    objList.add(new ComponentBuilder(Main.color(bedRespawnPoint)).event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text("MCPE-28723"))).getCurrentComponent());
                 } else {
-                    if (lastEntity.getCustomName() != null) {
-                        objList.add(new ComponentBuilder(lastEntity.getCustomName()).getCurrentComponent());
+                    Entity lastEntity = Bukkit.getEntity(entityHurtPlayerMap.get(deadPlayer.getUniqueId()));
+                    if (lastEntity == null) {
+                        objList.add("null");
                     } else {
-                        String key = "entity.minecraft." + lastEntity.getType().name().toLowerCase(Locale.ROOT);
-                        TranslatableComponent component = new TranslatableComponent(key);
-                        objList.add(component);
+                        if (lastEntity.getCustomName() != null) {
+                            objList.add(new ComponentBuilder(lastEntity.getCustomName()).getCurrentComponent());
+                        } else {
+                            String key = "entity.minecraft." + lastEntity.getType().name().toLowerCase(Locale.ROOT);
+                            TranslatableComponent component = new TranslatableComponent(key);
+                            objList.add(component);
+                        }
                     }
                 }
             }

@@ -14,6 +14,8 @@ death_attack_arrow_item:
   - "%1$s被%2$s用%3$s射杀"
 death_attack_badRespawnPoint_message:
   - "%1$s被%2$s杀死了"    #这个是被刻意的游戏设计杀死,暂时改不了
+bedRespawnPoint:
+  - "[刻意的游戏设计]"
 death_attack_cactus:
   - "%1$s被戳死了"
 death_attack_cactus_player:
