@@ -2,6 +2,7 @@ package com.github.yufiriamazenta.listener;
 
 import com.github.yufiriamazenta.DeathMessage;
 import com.github.yufiriamazenta.data.DataContainer;
+import com.github.yufiriamazenta.util.LangUtil;
 import com.github.yufiriamazenta.util.NmsUtil;
 import net.md_5.bungee.api.chat.*;
 import net.md_5.bungee.api.chat.hover.content.Item;
@@ -153,12 +154,12 @@ public enum DeathHandler implements Listener {
                 UUID lastEntityUuid = entityHurtPlayerMap.get(deadPlayer.getUniqueId());
                 if (lastEntityUuid == null) {
                     String bedRespawnPoint = DataContainer.getMessage("bedRespawnPoint");
-                    objList.add(new ComponentBuilder(DeathMessage.color(bedRespawnPoint)).event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text("MCPE-28723"))).getCurrentComponent());
+                    objList.add(new ComponentBuilder(LangUtil.color(bedRespawnPoint)).event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text("MCPE-28723"))).getCurrentComponent());
                 } else {
                     Entity lastEntity = Bukkit.getEntity(entityHurtPlayerMap.get(deadPlayer.getUniqueId()));
                     if (lastEntity == null) {
                         String bedRespawnPoint = DataContainer.getMessage("bedRespawnPoint");
-                        objList.add(new ComponentBuilder(DeathMessage.color(bedRespawnPoint)).event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text("MCPE-28723"))).getCurrentComponent());
+                        objList.add(new ComponentBuilder(LangUtil.color(bedRespawnPoint)).event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text("MCPE-28723"))).getCurrentComponent());
                     } else {
                         if (lastEntity.getCustomName() != null) {
                             objList.add(new ComponentBuilder(lastEntity.getCustomName()).getCurrentComponent());
@@ -196,7 +197,7 @@ public enum DeathHandler implements Listener {
                             new Item(handItem.getType().getKey().toString(), handItem.getAmount(), ItemTag.ofNbt(tag)))).getCurrentComponent());
         }
 
-        TranslatableComponent component = new TranslatableComponent(DeathMessage.color(message), objList.toArray(new Object[0]));
+        TranslatableComponent component = new TranslatableComponent(LangUtil.color(message), objList.toArray(new Object[0]));
         for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
             onlinePlayer.spigot().sendMessage(component);
         }
