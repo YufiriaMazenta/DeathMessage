@@ -3,6 +3,7 @@ author: YufiriaMazenta
 main: com.github.yufiriamazenta.DeathMessage
 version: ${version}
 api-version: 1.19
+load: POSTWORLD
 commands:
   deathmessagereload:
     aliases:
