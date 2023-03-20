@@ -1,6 +1,6 @@
-package com.mingxin.util;
+package com.github.yufiriamazenta.util;
 
-import com.mingxin.Main;
+import com.github.yufiriamazenta.DeathMessage;
 import org.bukkit.inventory.ItemStack;
 
 import java.lang.reflect.InvocationTargetException;
@@ -14,7 +14,7 @@ public class NmsUtil {
 
     static {
         try {
-            craftItemStackClass = Class.forName("org.bukkit.craftbukkit." + Main.version + ".inventory.CraftItemStack");
+            craftItemStackClass = Class.forName("org.bukkit.craftbukkit." + DeathMessage.version + ".inventory.CraftItemStack");
             asNmsCopyMethod = craftItemStackClass.getMethod("asNMSCopy", ItemStack.class);
             getTagCloneMethod = net.minecraft.world.item.ItemStack.class.getDeclaredMethod("getTagClone");
         } catch (ClassNotFoundException | NoSuchMethodException e) {

@@ -1,6 +1,6 @@
-package com.mingxin.data;
+package com.github.yufiriamazenta.data;
 
-import com.mingxin.Main;
+import com.github.yufiriamazenta.DeathMessage;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.HashMap;
@@ -13,8 +13,8 @@ public class DataContainer {
 
     public static void reloadMap() {
         deathMessageMap = new HashMap<>();
-        Main.plugin.reloadConfig();
-        FileConfiguration pluginConfig = Main.plugin.getConfig();
+        DeathMessage.plugin.reloadConfig();
+        FileConfiguration pluginConfig = DeathMessage.plugin.getConfig();
         for (String key : pluginConfig.getKeys(false)) {
             deathMessageMap.put(key.replace("_", "."), pluginConfig.getStringList(key));
         }
@@ -35,7 +35,7 @@ public class DataContainer {
     public static String getMessage(String deathCause) {
         if (hasDeathCause(deathCause)) {
             List<String> list = deathMessageMap.get(deathCause);
-            return list.get(Main.random.nextInt(list.size()));
+            return list.get(DeathMessage.random.nextInt(list.size()));
         }
         return null;
     }

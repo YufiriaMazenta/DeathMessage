@@ -4,7 +4,7 @@
 
 中文名称：死亡消息
 
-插件来源：自制
+插件来源：重置
 
 适用服务端：Spigot、Paper
 
@@ -12,17 +12,15 @@
 
 语言支持：简体中文
 
-适用版本：1.19，向下不兼容
+适用版本：1.19+
 
-前置Mod|插件：无
+下载地址：https://github.com/YufiriaMazenta/DeathMessage
 
-下载地址：暂无
-
-原贴地址：无
+原贴地址：https://github.com/YufiriaMazenta/DeathMessage
 
 插件简介：全局自定义死亡消息
 
-作者：Xin_biubiu
+作者：YufiriaMazenta
 
 ## 它能干什么
 
@@ -51,7 +49,7 @@
 
 如果不小心搞乱了，把config.yml删了，reload一下服务器他会重新生成一个。
 
-**唯一的指令：`/deathmessagereload`也可以简写做`/dmrl`，作用是重新加载配置文件，这样就不用reload服务器了（这个指令并不能重新生成一个config.yml）**
+**指令：`/deathmessagereload`也可以简写做`/dmrl`，作用是重新加载配置文件，这样就不用reload服务器了（这个指令并不能重新生成一个config.yml）**
 
 这是配置文件：
 

@@ -1,6 +1,6 @@
-package com.mingxin.commands;
+package com.github.yufiriamazenta.commands;
 
-import com.mingxin.data.DataContainer;
+import com.github.yufiriamazenta.data.DataContainer;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

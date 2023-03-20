@@ -1,7 +1,7 @@
-package com.mingxin.listener;
+package com.github.yufiriamazenta.listener;
 
-import com.mingxin.Main;
-import com.mingxin.data.DataContainer;
+import com.github.yufiriamazenta.DeathMessage;
+import com.github.yufiriamazenta.data.DataContainer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -18,7 +18,7 @@ public enum JoinQuitHandler implements Listener {
         Player player = event.getPlayer();
         String welcomeMessage = DataContainer.getMessage("helloMessage");
         if (!player.hasPlayedBefore()) {
-            welcomeMessage = Main.color(welcomeMessage);
+            welcomeMessage = DeathMessage.color(welcomeMessage);
             for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
                 onlinePlayer.sendMessage(welcomeMessage);
             }
@@ -26,7 +26,7 @@ public enum JoinQuitHandler implements Listener {
         String joinMessageString = DataContainer.getMessage("joinMessage");
         if (joinMessageString != null && !joinMessageString.equals("")) {
             joinMessageString = joinMessageString.replace("{}", player.getDisplayName());
-            joinMessageString = Main.color(joinMessageString);
+            joinMessageString = DeathMessage.color(joinMessageString);
             event.setJoinMessage(null);
             for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
                 onlinePlayer.sendMessage(joinMessageString);
@@ -40,7 +40,7 @@ public enum JoinQuitHandler implements Listener {
         String quitMessage = DataContainer.getMessage("quitMessage");
         if (quitMessage != null && !quitMessage.equals("")) {
             quitMessage = quitMessage.replace("{}", player.getDisplayName());
-            quitMessage = Main.color(quitMessage);
+            quitMessage = DeathMessage.color(quitMessage);
             event.setQuitMessage(quitMessage);
         }
     }

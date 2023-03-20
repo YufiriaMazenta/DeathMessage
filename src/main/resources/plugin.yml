@@ -1,7 +1,7 @@
 name: DeathMessage
-author: "Xin_biubiu"
-main: com.mingxin.Main
-version: 1.2.1
+author: YufiriaMazenta
+main: com.github.yufiriamazenta.DeathMessage
+version: ${version}
 api-version: 1.19
 commands:
   deathmessagereload:

@@ -1,9 +1,9 @@
-package com.mingxin;
+package com.github.yufiriamazenta;
 
-import com.mingxin.commands.DeathMessageReloadCommand;
-import com.mingxin.data.DataContainer;
-import com.mingxin.listener.DeathHandler;
-import com.mingxin.listener.JoinQuitHandler;
+import com.github.yufiriamazenta.commands.DeathMessageReloadCommand;
+import com.github.yufiriamazenta.data.DataContainer;
+import com.github.yufiriamazenta.listener.DeathHandler;
+import com.github.yufiriamazenta.listener.JoinQuitHandler;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
@@ -14,7 +14,7 @@ import java.util.Objects;
 import java.util.Random;
 import java.util.logging.Logger;
 
-public class Main extends JavaPlugin {
+public class DeathMessage extends JavaPlugin {
 
     public static Server server;
     public static String version;
