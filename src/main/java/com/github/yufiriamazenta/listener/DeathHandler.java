@@ -199,6 +199,7 @@ public enum DeathHandler implements Listener {
         for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
             onlinePlayer.spigot().sendMessage(component);
         }
+        Bukkit.getConsoleSender().spigot().sendMessage(component);
         entityHurtPlayerMap.remove(deadPlayer.getUniqueId());
         event.setDeathMessage(null);
     }
@@ -211,6 +212,13 @@ public enum DeathHandler implements Listener {
                 if (((Projectile) entity).getShooter() instanceof Mob mob) {
                     entity = mob;
                 }
+            } else if (entity instanceof AreaEffectCloud) {
+                if (((AreaEffectCloud) entity).getSource() instanceof Entity entity1) {
+                    entity = entity1;
+                }
+            } else if (entity instanceof EvokerFangs) {
+                if (((EvokerFangs) entity).getOwner() != null)
+                    entity = ((EvokerFangs) entity).getOwner();
             }
             entityHurtPlayerMap.put(player.getUniqueId(), entity.getUniqueId());
         }
