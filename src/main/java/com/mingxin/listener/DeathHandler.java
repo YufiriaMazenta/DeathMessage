@@ -104,7 +104,8 @@ public enum DeathHandler implements Listener {
                 } else {
                     Entity lastEntity = Bukkit.getEntity(entityHurtPlayerMap.get(deadPlayer.getUniqueId()));
                     if (lastEntity == null) {
-                        objList.add("null");
+                        String bedRespawnPoint = DataContainer.getMessage("bedRespawnPoint");
+                        objList.add(new ComponentBuilder(Main.color(bedRespawnPoint)).event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text("MCPE-28723"))).getCurrentComponent());
                     } else {
                         if (lastEntity.getCustomName() != null) {
                             objList.add(new ComponentBuilder(lastEntity.getCustomName()).getCurrentComponent());
