@@ -51,6 +51,10 @@ publishing {
     }
 }
 
+tasks.withType(JavaCompile::class.java) {
+    options.encoding = "UTF-8"
+}
+
 tasks {
     val props = HashMap<String, String>()
     val pluginVersion: String = version.toString() + "-" + SimpleDateFormat("yyyyMMdd").format(System.currentTimeMillis())
