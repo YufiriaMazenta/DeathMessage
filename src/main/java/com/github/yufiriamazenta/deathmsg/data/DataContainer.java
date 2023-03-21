@@ -1,6 +1,6 @@
-package com.github.yufiriamazenta.data;
+package com.github.yufiriamazenta.deathmsg.data;
 
-import com.github.yufiriamazenta.DeathMessage;
+import com.github.yufiriamazenta.deathmsg.DeathMessage;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.HashMap;

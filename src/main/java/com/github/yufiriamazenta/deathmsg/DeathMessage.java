@@ -1,9 +1,9 @@
-package com.github.yufiriamazenta;
+package com.github.yufiriamazenta.deathmsg;
 
-import com.github.yufiriamazenta.commands.DeathMessageReloadCommand;
-import com.github.yufiriamazenta.data.DataContainer;
-import com.github.yufiriamazenta.listener.DeathHandler;
-import com.github.yufiriamazenta.listener.JoinQuitHandler;
+import com.github.yufiriamazenta.deathmsg.commands.DeathMessageReloadCommand;
+import com.github.yufiriamazenta.deathmsg.data.DataContainer;
+import com.github.yufiriamazenta.deathmsg.listener.JoinQuitHandler;
+import com.github.yufiriamazenta.deathmsg.listener.DeathHandler;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;

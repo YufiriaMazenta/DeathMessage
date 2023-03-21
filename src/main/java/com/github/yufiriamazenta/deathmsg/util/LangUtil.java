@@ -1,6 +1,5 @@
-package com.github.yufiriamazenta.util;
+package com.github.yufiriamazenta.deathmsg.util;
 
-import com.github.yufiriamazenta.DeathMessage;
 import net.md_5.bungee.api.ChatColor;
 
 import java.util.regex.Matcher;

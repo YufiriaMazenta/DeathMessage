@@ -1,9 +1,9 @@
-package com.github.yufiriamazenta.listener;
+package com.github.yufiriamazenta.deathmsg.listener;
 
-import com.github.yufiriamazenta.DeathMessage;
-import com.github.yufiriamazenta.data.DataContainer;
-import com.github.yufiriamazenta.util.LangUtil;
-import com.github.yufiriamazenta.util.NmsUtil;
+import com.github.yufiriamazenta.deathmsg.DeathMessage;
+import com.github.yufiriamazenta.deathmsg.data.DataContainer;
+import com.github.yufiriamazenta.deathmsg.util.LangUtil;
+import com.github.yufiriamazenta.deathmsg.util.NmsUtil;
 import net.md_5.bungee.api.chat.*;
 import net.md_5.bungee.api.chat.hover.content.Item;
 import net.md_5.bungee.api.chat.hover.content.Text;

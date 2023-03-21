@@ -1,9 +1,8 @@
-package com.github.yufiriamazenta.commands;
+package com.github.yufiriamazenta.deathmsg.commands;
 
-import com.github.yufiriamazenta.DeathMessage;
-import com.github.yufiriamazenta.data.DataContainer;
-import com.github.yufiriamazenta.util.LangUtil;
-import org.bukkit.ChatColor;
+import com.github.yufiriamazenta.deathmsg.DeathMessage;
+import com.github.yufiriamazenta.deathmsg.data.DataContainer;
+import com.github.yufiriamazenta.deathmsg.util.LangUtil;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;

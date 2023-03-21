@@ -1,6 +1,6 @@
 name: DeathMessage
 author: YufiriaMazenta
-main: com.github.yufiriamazenta.DeathMessage
+main: com.github.yufiriamazenta.deathmsg.DeathMessage
 version: ${version}
 api-version: 1.19
 load: POSTWORLD

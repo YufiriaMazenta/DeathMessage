@@ -1,6 +1,6 @@
-package com.github.yufiriamazenta.util;
+package com.github.yufiriamazenta.deathmsg.util;
 
-import com.github.yufiriamazenta.DeathMessage;
+import com.github.yufiriamazenta.deathmsg.DeathMessage;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 
