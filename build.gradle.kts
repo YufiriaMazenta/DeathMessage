@@ -41,8 +41,7 @@ dependencies {
 }
 
 group = "com.github.yufiriamazenta"
-version = "1.0.3"
-var pluginVersion: String = version.toString() + "." + SimpleDateFormat("yyyyMMdd").format(System.currentTimeMillis())
+version = "1.0.4"
 description = "DeathMessage"
 java.sourceCompatibility = JavaVersion.VERSION_17
 
@@ -54,6 +53,7 @@ publishing {
 
 tasks {
     val props = HashMap<String, String>()
+    val pluginVersion: String = version.toString() + "-" + SimpleDateFormat("yyyyMMdd").format(System.currentTimeMillis())
     props["version"] = pluginVersion
     "processResources"(ProcessResources::class) {
         filesMatching("plugin.yml") {
