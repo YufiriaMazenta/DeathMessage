@@ -1,6 +1,8 @@
 package com.github.yufiriamazenta.commands;
 
+import com.github.yufiriamazenta.DeathMessage;
 import com.github.yufiriamazenta.data.DataContainer;
+import com.github.yufiriamazenta.util.LangUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -20,7 +22,8 @@ public class DeathMessageReloadCommand implements CommandExecutor {
             return false;
         }
         DataContainer.reloadMap();
-        commandSender.sendMessage(ChatColor.GREEN + "DeathMessage reload complete");
+        String message = DeathMessage.plugin.getConfig().getString("command_reload");
+        commandSender.sendMessage(LangUtil.color(message));
         return true;
     }
 }

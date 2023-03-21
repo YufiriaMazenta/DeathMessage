@@ -4,7 +4,7 @@
 
 中文名称：死亡消息
 
-插件来源：重置
+插件来源：原创
 
 适用服务端：Spigot、Paper
 
@@ -31,7 +31,7 @@
 
 ## 效果展示
 
-![QQ截图20220616114335.png](https://pic.rmb.bdstatic.com/bjh/3632ad8e11d5a5b2ad3f74ea259cf615.png)
+![a.png](a.png)
 
 ## 使用方法
 

@@ -41,7 +41,7 @@ dependencies {
 }
 
 group = "com.github.yufiriamazenta"
-version = "1.0.2"
+version = "1.0.3"
 var pluginVersion: String = version.toString() + SimpleDateFormat("yyyyMMdd").format(System.currentTimeMillis())
 description = "DeathMessage"
 java.sourceCompatibility = JavaVersion.VERSION_17

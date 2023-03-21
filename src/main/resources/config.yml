@@ -180,3 +180,4 @@ death_fell_finish_item:
   - "%1$s摔伤得太重并被%2$s用%3$s完结了生命"
 death_fell_killer:
   - "%1$s注定要摔死"
+command_reload: '&a插件重载完毕'
