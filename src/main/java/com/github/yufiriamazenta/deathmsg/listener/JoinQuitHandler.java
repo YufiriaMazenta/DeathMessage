@@ -18,6 +18,7 @@ public enum JoinQuitHandler implements Listener {
         Player player = event.getPlayer();
         String welcomeMessage = DataContainer.getMessage("helloMessage");
         if (!player.hasPlayedBefore()) {
+            welcomeMessage = welcomeMessage.replace("{}", player.getDisplayName());
             welcomeMessage = LangUtil.color(welcomeMessage);
             for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
                 onlinePlayer.sendMessage(welcomeMessage);
