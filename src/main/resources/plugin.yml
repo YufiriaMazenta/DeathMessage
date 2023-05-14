@@ -12,3 +12,6 @@ commands:
     description: "reload death message"
     permission: "op"
     permission-message: "§4you are not op !"
+  deathmessagefilter:
+    aliases:
+      - 'dmf'

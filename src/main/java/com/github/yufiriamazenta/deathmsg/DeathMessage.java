@@ -1,6 +1,7 @@
 package com.github.yufiriamazenta.deathmsg;
 
 import com.github.yufiriamazenta.deathmsg.commands.DeathMessageReloadCommand;
+import com.github.yufiriamazenta.deathmsg.commands.FilterDeathMessageCmd;
 import com.github.yufiriamazenta.deathmsg.data.DataContainer;
 import com.github.yufiriamazenta.deathmsg.listener.JoinQuitHandler;
 import com.github.yufiriamazenta.deathmsg.listener.DeathHandler;
@@ -54,6 +55,8 @@ public class DeathMessage extends JavaPlugin {
     public void initCommandExecutor() {
         if (Bukkit.getPluginCommand("deathmessagereload") != null) {
             Objects.requireNonNull(Bukkit.getPluginCommand("deathmessagereload")).setExecutor(new DeathMessageReloadCommand());
+            Bukkit.getPluginCommand("deathmessagefilter").setExecutor(FilterDeathMessageCmd.INSTANCE);
+            Bukkit.getPluginCommand("deathmessagefilter").setTabCompleter(FilterDeathMessageCmd.INSTANCE);
         } else {
             getLogger().info("set command 'deathmessagereload' executor failed");
         }

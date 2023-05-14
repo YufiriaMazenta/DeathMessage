@@ -1,6 +1,7 @@
 package com.github.yufiriamazenta.deathmsg.listener;
 
 import com.github.yufiriamazenta.deathmsg.DeathMessage;
+import com.github.yufiriamazenta.deathmsg.commands.FilterDeathMessageCmd;
 import com.github.yufiriamazenta.deathmsg.data.DataContainer;
 import com.github.yufiriamazenta.deathmsg.util.LangUtil;
 import com.github.yufiriamazenta.deathmsg.util.NmsUtil;
@@ -20,6 +21,8 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -190,18 +193,32 @@ public enum DeathHandler implements Listener {
                 }
             }
             String tag = NmsUtil.getItemTag(handItem);
-            objList.add(new ComponentBuilder("[" + itemName + "]").event(
+            objList.add(new ComponentBuilder("&r[" + itemName + "&r]").event(
                     new HoverEvent(HoverEvent.Action.SHOW_ITEM,
                             new Item(handItem.getType().getKey().toString(), handItem.getAmount(), ItemTag.ofNbt(tag)))).getCurrentComponent());
         }
 
         TranslatableComponent component = new TranslatableComponent(LangUtil.color(message), objList.toArray(new Object[0]));
         for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+            if (!deadPlayer.equals(onlinePlayer)) {
+                if (filterDeathMsg(onlinePlayer))
+                    continue;
+            }
             onlinePlayer.spigot().sendMessage(component);
         }
         Bukkit.getConsoleSender().spigot().sendMessage(component);
         entityHurtPlayerMap.remove(deadPlayer.getUniqueId());
         event.setDeathMessage(null);
+    }
+
+    private boolean filterDeathMsg(Player player) {
+        PersistentDataContainer dataContainer = player.getPersistentDataContainer();
+        Byte val = dataContainer.get(FilterDeathMessageCmd.INSTANCE.getFilterKey(), PersistentDataType.BYTE);
+        if (val == null || val == 0) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     @EventHandler
