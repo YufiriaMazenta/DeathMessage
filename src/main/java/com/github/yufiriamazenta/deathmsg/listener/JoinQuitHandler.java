@@ -1,10 +1,12 @@
 package com.github.yufiriamazenta.deathmsg.listener;
 
+import com.github.yufiriamazenta.deathmsg.DeathMessage;
 import com.github.yufiriamazenta.deathmsg.data.DataContainer;
 import com.github.yufiriamazenta.deathmsg.util.LangUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -31,6 +33,29 @@ public enum JoinQuitHandler implements Listener {
             event.setJoinMessage(null);
             for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
                 onlinePlayer.sendMessage(joinMessageString);
+            }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGH)
+    public void onFirstPlay(PlayerJoinEvent event) {
+        if (!DeathMessage.plugin.getConfig().getBoolean("new_player_tpr", true)) {
+            return;
+        }
+        Player player = event.getPlayer();
+        if (!player.hasPlayedBefore()) {
+            try {
+                player.getScheduler().execute(DeathMessage.plugin, () -> {
+                    Bukkit.dispatchCommand(player, "tpr");
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "eco set "+ player.getName() + " 2");
+                    LangUtil.msg(player, "new_player_msg");
+                }, null, 60L);
+            } catch (Exception e) {
+                Bukkit.getScheduler().runTaskLater(DeathMessage.plugin, () -> {
+                    Bukkit.dispatchCommand(player, "tpr");
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "eco set "+ player.getName() + " 2");
+                    LangUtil.msg(player, "new_player_msg");
+                }, 60L);
             }
         }
     }

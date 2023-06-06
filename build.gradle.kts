@@ -30,18 +30,21 @@ repositories {
     maven {
         url = uri("https://repo.purpurmc.org/snapshots")
     }
+    maven {
+        url = uri("https://repo.papermc.io/repository/maven-public/")
+    }
     mavenCentral()
 }
 
 dependencies {
-    compileOnly("org.spigotmc:spigot-api:1.19-R0.1-SNAPSHOT")
+//    compileOnly("org.spigotmc:spigot-api:1.19-R0.1-SNAPSHOT")
     compileOnly("org.spigotmc:spigot:1.19-R0.1-SNAPSHOT")
-    compileOnly("org.purpurmc.purpur:dev-bundle:1.19.4-R0.1-SNAPSHOT")
-
+//    compileOnly("org.purpurmc.purpur:dev-bundle:1.19.4-R0.1-SNAPSHOT")
+    compileOnly("dev.folia:folia-api:1.19.4-R0.1-SNAPSHOT")
 }
 
 group = "com.github.yufiriamazenta"
-version = "1.0.5"
+version = "1.0.6"
 description = "DeathMessage"
 java.sourceCompatibility = JavaVersion.VERSION_17
 

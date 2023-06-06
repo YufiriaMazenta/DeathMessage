@@ -184,3 +184,5 @@ command_reload: '&a插件重载完毕'
 only_player: '&c只有玩家才能使用此命令'
 filter_on: '&a已开启死亡消息屏蔽'
 filter_off: '&a已关闭死亡消息屏蔽'
+new_player_tpr: true
+new_player_msg: '&6作为新玩家，你将有'
