@@ -5,6 +5,7 @@ import com.github.yufiriamazenta.deathmsg.commands.FilterDeathMessageCmd;
 import com.github.yufiriamazenta.deathmsg.data.DataContainer;
 import com.github.yufiriamazenta.deathmsg.util.LangUtil;
 import com.github.yufiriamazenta.deathmsg.util.NmsUtil;
+import net.kyori.adventure.text.Component;
 import net.md_5.bungee.api.chat.*;
 import net.md_5.bungee.api.chat.hover.content.Item;
 import net.md_5.bungee.api.chat.hover.content.Text;
@@ -144,13 +145,11 @@ public enum DeathHandler implements Listener {
 
         String message = DataContainer.getMessage(deathCause);
         List<Object> objList = new ArrayList<>();
-        BaseComponent name = new ComponentBuilder(deadPlayer.getDisplayName())
-                .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(deadPlayer.getUniqueId().toString())))
-                .getCurrentComponent();
+        Component name = deadPlayer.playerListName();
         objList.add(name);
         if (objArrNum >= 2) {
             if (deadPlayer.getKiller() != null) {
-                objList.add(new TextComponent(deadPlayer.getKiller().getDisplayName()));
+                objList.add(deadPlayer.getKiller().playerListName());
             } else {
                 UUID lastEntityUuid = entityHurtPlayerMap.get(deadPlayer.getUniqueId());
                 if (lastEntityUuid == null) {
@@ -193,7 +192,7 @@ public enum DeathHandler implements Listener {
                 }
             }
             String tag = NmsUtil.getItemTag(handItem);
-            objList.add(new ComponentBuilder("&r[" + itemName + "&r]").event(
+            objList.add(new ComponentBuilder(LangUtil.color("&r[" + itemName + "&r]")).event(
                     new HoverEvent(HoverEvent.Action.SHOW_ITEM,
                             new Item(handItem.getType().getKey().toString(), handItem.getAmount(), ItemTag.ofNbt(tag)))).getCurrentComponent());
         }

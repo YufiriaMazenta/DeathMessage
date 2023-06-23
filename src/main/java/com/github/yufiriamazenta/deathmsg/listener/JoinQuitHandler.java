@@ -3,13 +3,18 @@ package com.github.yufiriamazenta.deathmsg.listener;
 import com.github.yufiriamazenta.deathmsg.DeathMessage;
 import com.github.yufiriamazenta.deathmsg.data.DataContainer;
 import com.github.yufiriamazenta.deathmsg.util.LangUtil;
+import io.papermc.paper.threadedregions.scheduler.ScheduledTask;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.ItemStack;
+
+import java.util.function.Consumer;
 
 public enum JoinQuitHandler implements Listener {
 
@@ -47,15 +52,23 @@ public enum JoinQuitHandler implements Listener {
             try {
                 player.getScheduler().execute(DeathMessage.plugin, () -> {
                     Bukkit.dispatchCommand(player, "tpr");
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "eco set "+ player.getName() + " 2");
                     LangUtil.msg(player, "new_player_msg");
                 }, null, 60L);
+                Bukkit.getGlobalRegionScheduler().runDelayed(DeathMessage.plugin, task -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "eco set "+ player.getName() + " 2"), 60L);
+                player.getScheduler().execute(DeathMessage.plugin, () -> {
+                    player.setBedSpawnLocation(player.getLocation());
+                    player.getInventory().addItem(new ItemStack(Material.PINK_BED));
+                }, null,80L);
             } catch (Exception e) {
                 Bukkit.getScheduler().runTaskLater(DeathMessage.plugin, () -> {
                     Bukkit.dispatchCommand(player, "tpr");
                     Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "eco set "+ player.getName() + " 2");
                     LangUtil.msg(player, "new_player_msg");
                 }, 60L);
+                Bukkit.getScheduler().runTaskLater(DeathMessage.plugin, () -> {
+                    player.getInventory().addItem(new ItemStack(Material.PINK_BED));
+                    player.setBedSpawnLocation(player.getLocation());
+                }, 80L);
             }
         }
     }
