@@ -21,7 +21,7 @@ public class DeathMessageReloadCommand implements CommandExecutor {
             return false;
         }
         DataContainer.reloadMap();
-        String message = DeathMessage.plugin.getConfig().getString("command_reload");
+        String message = DeathMessage.INSTANCE.getConfig().getString("command_reload");
         commandSender.sendMessage(LangUtil.color(message));
         return true;
     }

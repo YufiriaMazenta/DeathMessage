@@ -5,41 +5,38 @@ import com.github.yufiriamazenta.deathmsg.commands.FilterDeathMessageCmd;
 import com.github.yufiriamazenta.deathmsg.data.DataContainer;
 import com.github.yufiriamazenta.deathmsg.listener.JoinQuitHandler;
 import com.github.yufiriamazenta.deathmsg.listener.DeathHandler;
+import crypticlib.BukkitPlugin;
+import crypticlib.util.MsgUtil;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Objects;
 import java.util.Random;
-import java.util.logging.Logger;
 
-public class DeathMessage extends JavaPlugin {
+public class DeathMessage extends BukkitPlugin {
 
     public static Server server;
     public static String version;
-    public static Logger LOGGER;
-    public static Plugin plugin;
+    public static DeathMessage INSTANCE;
     public static Random random;
 
     @Override
-    public void onDisable() {
+    public void disable() {
         getLogger().info("DeathMessage Disabled");
         server = null;
         version = null;
-        LOGGER = null;
     }
 
     @Override
-    public void onEnable() {
+    public void enable() {
         getLogger().info("DeathMessage Enabled");
         saveDefaultConfig();
         server = getServer();
         version = getServer().getClass().getPackage().getName().split("\\.")[3];
-        System.out.println("Load for version " + version);
-        LOGGER = getLogger();
-        plugin = this;
+        MsgUtil.info("[DeathMessage] Load for version " + version);
+        INSTANCE = this;
         random = new Random();
 
         initDataContainer();
@@ -66,6 +63,10 @@ public class DeathMessage extends JavaPlugin {
 
         DataContainer.reloadMap();
 
+    }
+
+    public static DeathMessage getInstance() {
+        return INSTANCE;
     }
 
     public static String color(String msg) {

@@ -18,7 +18,7 @@ public enum FilterDeathMessageCmd implements TabExecutor {
 
     INSTANCE;
 
-    private final NamespacedKey filterKey = new NamespacedKey(DeathMessage.plugin, "death_msg_filter");
+    private final NamespacedKey filterKey = new NamespacedKey(DeathMessage.INSTANCE, "death_msg_filter");
 
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {

@@ -143,14 +143,19 @@ public enum DeathHandler implements Listener {
         }
 
         String message = DataContainer.getMessage(deathCause);
+        if (message == null) {
+            LangUtil.msg(Bukkit.getConsoleSender(), "Death Cause " + deathCause + " is Missing");
+            deathCause = deathCause.replace(".", "_");
+            DeathMessage.getInstance().getConfig().set(deathCause, List.of(deathCause));
+            return;
+        }
         List<Object> objList = new ArrayList<>();
-        BaseComponent name = new ComponentBuilder(deadPlayer.getDisplayName())
-                .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(deadPlayer.getUniqueId().toString())))
-                .getCurrentComponent();
+        String displayName = LangUtil.color(deadPlayer.getDisplayName());
+        BaseComponent name = new TextComponent(displayName);
         objList.add(name);
         if (objArrNum >= 2) {
             if (deadPlayer.getKiller() != null) {
-                objList.add(new TextComponent(deadPlayer.getKiller().getDisplayName()));
+                objList.add(new TextComponent(LangUtil.color(deadPlayer.getKiller().getDisplayName())));
             } else {
                 UUID lastEntityUuid = entityHurtPlayerMap.get(deadPlayer.getUniqueId());
                 if (lastEntityUuid == null) {
@@ -193,11 +198,12 @@ public enum DeathHandler implements Listener {
                 }
             }
             String tag = NmsUtil.getItemTag(handItem);
-            objList.add(new ComponentBuilder("&r[" + itemName + "&r]").event(
+            objList.add(new ComponentBuilder(LangUtil.color("&r[" + itemName + "&r]")).event(
                     new HoverEvent(HoverEvent.Action.SHOW_ITEM,
                             new Item(handItem.getType().getKey().toString(), handItem.getAmount(), ItemTag.ofNbt(tag)))).getCurrentComponent());
         }
 
+        
         TranslatableComponent component = new TranslatableComponent(LangUtil.color(message), objList.toArray(new Object[0]));
         for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
             if (!deadPlayer.equals(onlinePlayer)) {
@@ -214,11 +220,7 @@ public enum DeathHandler implements Listener {
     private boolean filterDeathMsg(Player player) {
         PersistentDataContainer dataContainer = player.getPersistentDataContainer();
         Byte val = dataContainer.get(FilterDeathMessageCmd.INSTANCE.getFilterKey(), PersistentDataType.BYTE);
-        if (val == null || val == 0) {
-            return false;
-        } else {
-            return true;
-        }
+        return val != null && val != 0;
     }
 
     @EventHandler

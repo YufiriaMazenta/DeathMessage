@@ -36,7 +36,7 @@ public class LangUtil {
         if (sender == null) {
             return;
         }
-        String message = DeathMessage.plugin.getConfig().getString(msgKey, msgKey);
+        String message = DeathMessage.INSTANCE.getConfig().getString(msgKey, msgKey);
         for (String formatStr : formatMap.keySet()) {
             message = message.replace(formatStr, formatMap.get(formatStr));
         }

@@ -13,8 +13,8 @@ public class DataContainer {
 
     public static void reloadMap() {
         deathMessageMap = new HashMap<>();
-        DeathMessage.plugin.reloadConfig();
-        FileConfiguration pluginConfig = DeathMessage.plugin.getConfig();
+        DeathMessage.INSTANCE.reloadConfig();
+        FileConfiguration pluginConfig = DeathMessage.INSTANCE.getConfig();
         for (String key : pluginConfig.getKeys(false)) {
             deathMessageMap.put(key.replace("_", "."), pluginConfig.getStringList(key));
         }
