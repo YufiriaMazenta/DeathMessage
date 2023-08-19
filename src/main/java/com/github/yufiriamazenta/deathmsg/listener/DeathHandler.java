@@ -5,6 +5,7 @@ import com.github.yufiriamazenta.deathmsg.commands.FilterDeathMessageCmd;
 import com.github.yufiriamazenta.deathmsg.data.DataContainer;
 import com.github.yufiriamazenta.deathmsg.util.LangUtil;
 import com.github.yufiriamazenta.deathmsg.util.NmsUtil;
+import me.clip.placeholderapi.PlaceholderAPI;
 import net.md_5.bungee.api.chat.*;
 import net.md_5.bungee.api.chat.hover.content.Item;
 import net.md_5.bungee.api.chat.hover.content.Text;
@@ -50,7 +51,9 @@ public enum DeathHandler implements Listener {
     }
 
     @EventHandler
-    public void replaceMessage(PlayerDeathEvent event) {
+    @SuppressWarnings("removal")
+    public void onPlayerDeathReplaceMessage(PlayerDeathEvent event) {
+        //以下获取死亡玩家的nms对象
         Player deadPlayer = event.getEntity();
         String deathCause;
         EntityPlayer entityPlayer = null;
@@ -60,6 +63,7 @@ public enum DeathHandler implements Listener {
             e.printStackTrace();
         }
 
+        //以下对需要的反射内容进行获取并获取死亡消息的格式
         int objArrNum = 1;
         if (entityPlayer != null) {
             CombatTracker tracker = null;
@@ -103,7 +107,7 @@ public enum DeathHandler implements Listener {
 
             TranslatableContents message = null;
             try {
-                message = (TranslatableContents) getComponentContentsMethod.invoke(baseComponent);//get combatTracker then get deathMessage(ChatMessage)
+                message = (TranslatableContents) getComponentContentsMethod.invoke(baseComponent);
             } catch (IllegalAccessException | InvocationTargetException e) {
                 e.printStackTrace();
             }
@@ -149,13 +153,18 @@ public enum DeathHandler implements Listener {
             DeathMessage.getInstance().getConfig().set(deathCause, List.of(deathCause));
             return;
         }
+
+        //以下对死亡消息进行处理
         List<Object> objList = new ArrayList<>();
-        String displayName = LangUtil.color(deadPlayer.getDisplayName());
+        //以下处理第一个对象的名字，一般是被杀的玩家
+        String displayNameFormat = DeathMessage.INSTANCE.getConfig().getString("player_name_format", "%player_displayname%");
+        String displayName = LangUtil.color(PlaceholderAPI.setPlaceholders(deadPlayer, displayNameFormat));
         BaseComponent name = new TextComponent(displayName);
         objList.add(name);
         if (objArrNum >= 2) {
             if (deadPlayer.getKiller() != null) {
-                objList.add(new TextComponent(LangUtil.color(deadPlayer.getKiller().getDisplayName())));
+                String killerDisplayName = LangUtil.color(PlaceholderAPI.setPlaceholders(deadPlayer.getKiller(), displayNameFormat));
+                objList.add(new TextComponent(LangUtil.color(killerDisplayName)));
             } else {
                 UUID lastEntityUuid = entityHurtPlayerMap.get(deadPlayer.getUniqueId());
                 if (lastEntityUuid == null) {
@@ -170,7 +179,7 @@ public enum DeathHandler implements Listener {
                         if (lastEntity.getCustomName() != null) {
                             objList.add(new ComponentBuilder(lastEntity.getCustomName()).getCurrentComponent());
                         } else {
-                            String key = "entity.minecraft." + lastEntity.getType().name().toLowerCase(Locale.ROOT);
+                            String key = lastEntity.getType().getTranslationKey();
                             TranslatableComponent component = new TranslatableComponent(key);
                             objList.add(component);
                         }
@@ -197,8 +206,15 @@ public enum DeathHandler implements Listener {
                     itemName = meta.getLocalizedName();
                 }
             }
+            String itemNameFormat;
+            if (handItem.getEnchantments().size() < 1) {
+                itemNameFormat = DeathMessage.getInstance().getConfig().getString("item_default_format", "&r%item_name%");
+            } else {
+                itemNameFormat = DeathMessage.getInstance().getConfig().getString("item_enchanted_format", "&r%item_name%");
+            }
+            itemName = itemNameFormat.replace("%item_name%", "[" + itemName + "]");
             String tag = NmsUtil.getItemTag(handItem);
-            objList.add(new ComponentBuilder(LangUtil.color("&r[" + itemName + "&r]")).event(
+            objList.add(new ComponentBuilder(LangUtil.color(itemName)).event(
                     new HoverEvent(HoverEvent.Action.SHOW_ITEM,
                             new Item(handItem.getType().getKey().toString(), handItem.getAmount(), ItemTag.ofNbt(tag)))).getCurrentComponent());
         }

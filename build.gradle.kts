@@ -14,6 +14,7 @@ repositories {
     maven("https://oss.sonatype.org/content/repositories/central")
     maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
     maven("https://repo.purpurmc.org/snapshots")
+    maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
     maven("https://jitpack.io")
     maven("https://repo.papermc.io/repository/maven-public/")
     mavenCentral()
@@ -23,11 +24,12 @@ dependencies {
     compileOnly("org.spigotmc:spigot:1.19-R0.1-SNAPSHOT")
     compileOnly("dev.folia:folia-api:1.19.4-R0.1-SNAPSHOT")
     compileOnly("net.luckperms:api:5.4")
+    compileOnly("me.clip:placeholderapi:2.11.1")
     implementation("com.github.YufiriaMazenta:CrypticLib:1.0.1")
 }
 
 group = "com.github.yufiriamazenta"
-version = "1.0.9"
+version = "1.1.0"
 description = "DeathMessage"
 java.sourceCompatibility = JavaVersion.VERSION_17
 java.sourceCompatibility = JavaVersion.VERSION_17
