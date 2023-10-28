@@ -33,8 +33,14 @@ public class DataContainer {
     }
 
     public static String getMessage(String deathCause) {
+        return getMessage(deathCause, deathCause);
+    }
+
+    public static String getMessage(String deathCause, String def) {
         if (hasDeathCause(deathCause)) {
             List<String> list = deathMessageMap.get(deathCause);
+            if (list == null || list.isEmpty())
+                return def;
             return list.get(DeathMessage.random.nextInt(list.size()));
         }
         return null;

@@ -1,8 +1,11 @@
 package com.github.yufiriamazenta.deathmsg.util;
 
 import com.github.yufiriamazenta.deathmsg.DeathMessage;
+import crypticlib.util.MsgUtil;
 import net.md_5.bungee.api.ChatColor;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -41,6 +44,13 @@ public class LangUtil {
             message = message.replace(formatStr, formatMap.get(formatStr));
         }
         sender.sendMessage(color(message));
+    }
+
+    public static String placeholder(Player player, String msg) {
+        String replace = MsgUtil.placeholder(player, msg);
+        if (replace.equals(msg))
+            return msg.replace("%player_name%", player.getDisplayName());
+        return replace;
     }
 
 }

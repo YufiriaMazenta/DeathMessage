@@ -1,9 +1,9 @@
-helloMessage:
-  - "&b新人&c&l来了奥！"
-joinMessage:
-  - "{}&b&l来了喵~"
-quitMessage:
-  - "{}&b&l走了喵~"
+first_join_msg:
+  - "&b新人%player_name%&c&l来了奥！"
+join_msg:
+  - "%player_name%&b&l来了喵~"
+quit_msg:
+  - "%player_name%&b&l走了喵~"
 death_attack_anvil:
   - "%1$s被坠落的铁砧压扁了"
 death_attack_anvil_player:
@@ -14,7 +14,7 @@ death_attack_arrow_item:
   - "%1$s被%2$s用%3$s射杀"
 death_attack_badRespawnPoint_message:
   - "%1$s被%2$s杀死了"
-bedRespawnPoint:
+bed_respawn_point:
   - "[刻意的游戏设计]"
 death_attack_cactus:
   - "%1$s被戳死了"

@@ -3,6 +3,8 @@ package com.github.yufiriamazenta.deathmsg.listener;
 import com.github.yufiriamazenta.deathmsg.DeathMessage;
 import com.github.yufiriamazenta.deathmsg.data.DataContainer;
 import com.github.yufiriamazenta.deathmsg.util.LangUtil;
+import crypticlib.util.MsgUtil;
+import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -20,18 +22,16 @@ public enum JoinQuitHandler implements Listener {
     @EventHandler
     public void welcomeNewPlayer(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        String welcomeMessage = DataContainer.getMessage("helloMessage");
+        String welcomeMessage = DataContainer.getMessage("first_join_msg");
         if (!player.hasPlayedBefore()) {
-            welcomeMessage = welcomeMessage.replace("{}", player.getDisplayName());;
-            welcomeMessage = LangUtil.color(welcomeMessage);
+            welcomeMessage = LangUtil.color(LangUtil.placeholder(player, welcomeMessage));
             for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
                 onlinePlayer.sendMessage(welcomeMessage);
             }
         }
-        String joinMessageString = DataContainer.getMessage("joinMessage");
-        if (joinMessageString != null && !joinMessageString.equals("")) {
-            joinMessageString = joinMessageString.replace("{}", player.getDisplayName());
-            joinMessageString = LangUtil.color(joinMessageString);
+        String joinMessageString = DataContainer.getMessage("join_msg");
+        if (joinMessageString != null && !joinMessageString.isEmpty()) {
+            joinMessageString = LangUtil.color(LangUtil.placeholder(player, joinMessageString));
             event.setJoinMessage(null);
             for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
                 onlinePlayer.sendMessage(joinMessageString);
@@ -42,10 +42,9 @@ public enum JoinQuitHandler implements Listener {
     @EventHandler
     public void changeQuitMessage(PlayerQuitEvent event) {
         Player player = event.getPlayer();
-        String quitMessage = DataContainer.getMessage("quitMessage");
-        if (quitMessage != null && !quitMessage.equals("")) {
-            quitMessage = quitMessage.replace("{}", player.getDisplayName());
-            quitMessage = LangUtil.color(quitMessage);
+        String quitMessage = DataContainer.getMessage("quit_msg");
+        if (quitMessage != null && !quitMessage.isEmpty()) {
+            quitMessage = LangUtil.color(LangUtil.placeholder(player, quitMessage));
             event.setQuitMessage(quitMessage);
         }
     }

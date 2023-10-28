@@ -230,7 +230,7 @@ public enum DeathHandler implements Listener {
             UUID lastEntityUuid = entityHurtPlayerMap.get(deadPlayer.getUniqueId());
             if (lastEntityUuid == null || Bukkit.getEntity(lastEntityUuid) == null) {
                 //当不存在击杀实体时,说明玩家可能死于方块爆炸
-                String bedRespawnPoint = DataContainer.getMessage("bedRespawnPoint");
+                String bedRespawnPoint = DataContainer.getMessage("bed_respawn_point");
                 BaseComponent bedRespawnDisplayCompound = new TextComponent();
                 for (BaseComponent baseComponent : TextComponent.fromLegacyText(bedRespawnPoint)) {
                     bedRespawnDisplayCompound.addExtra(baseComponent);

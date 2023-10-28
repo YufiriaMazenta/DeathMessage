@@ -12,7 +12,7 @@ commands:
       - "dmrl"
     usage: "§4/dmrl"
     description: "reload death message"
-    permission: "op"
+    permission: "deathmessage.command.reload"
     permission-message: "§4you are not op !"
   deathmessagefilter:
     aliases:
