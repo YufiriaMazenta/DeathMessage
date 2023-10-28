@@ -4,7 +4,7 @@ main: com.github.yufiriamazenta.deathmsg.DeathMessage
 version: ${version}
 api-version: 1.17
 load: POSTWORLD
-depend: [ PlaceholderAPI ]
+soft-depend: [ PlaceholderAPI ]
 folia-supported: true
 commands:
   deathmessagereload:
