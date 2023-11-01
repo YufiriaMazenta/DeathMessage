@@ -17,3 +17,9 @@ commands:
   deathmessagefilter:
     aliases:
       - 'dmf'
+    permission: deathmessage.command.filter
+permissions:
+  deathmessage.command.filter:
+    default: true
+  deathmessage.perm.default:
+    default: true

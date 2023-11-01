@@ -29,7 +29,7 @@ dependencies {
 }
 
 group = "com.github.yufiriamazenta"
-version = "1.1.2"
+version = "1.1.3"
 description = "DeathMessage"
 java.sourceCompatibility = JavaVersion.VERSION_17
 java.sourceCompatibility = JavaVersion.VERSION_17

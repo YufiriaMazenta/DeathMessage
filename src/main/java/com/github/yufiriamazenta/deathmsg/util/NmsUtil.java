@@ -1,6 +1,7 @@
 package com.github.yufiriamazenta.deathmsg.util;
 
 import com.github.yufiriamazenta.deathmsg.DeathMessage;
+import crypticlib.CrypticLib;
 import org.bukkit.inventory.ItemStack;
 
 import java.lang.reflect.InvocationTargetException;
@@ -14,7 +15,7 @@ public class NmsUtil {
 
     static {
         try {
-            craftItemStackClass = Class.forName("org.bukkit.craftbukkit." + DeathMessage.version + ".inventory.CraftItemStack");
+            craftItemStackClass = Class.forName("org.bukkit.craftbukkit." + CrypticLib.nmsVersion() + ".inventory.CraftItemStack");
             asNmsCopyMethod = craftItemStackClass.getMethod("asNMSCopy", ItemStack.class);
             getTagCloneMethod = net.minecraft.world.item.ItemStack.class.getDeclaredMethod("getTagClone");
         } catch (ClassNotFoundException | NoSuchMethodException e) {

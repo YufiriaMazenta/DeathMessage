@@ -2,9 +2,10 @@ package com.github.yufiriamazenta.deathmsg.listener;
 
 import com.github.yufiriamazenta.deathmsg.DeathMessage;
 import com.github.yufiriamazenta.deathmsg.commands.FilterDeathMessageCmd;
-import com.github.yufiriamazenta.deathmsg.data.DataContainer;
+import com.github.yufiriamazenta.deathmsg.data.DataManager;
 import com.github.yufiriamazenta.deathmsg.util.LangUtil;
 import com.github.yufiriamazenta.deathmsg.util.NmsUtil;
+import crypticlib.CrypticLib;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.md_5.bungee.api.chat.*;
 import net.md_5.bungee.api.chat.hover.content.Item;
@@ -40,7 +41,7 @@ public enum DeathHandler implements Listener {
 
     DeathHandler() {
         try {
-            Class<?> classCraftEntity = Class.forName("org.bukkit.craftbukkit." + DeathMessage.version + ".entity.CraftEntity");
+            Class<?> classCraftEntity = Class.forName("org.bukkit.craftbukkit." + CrypticLib.nmsVersion() + ".entity.CraftEntity");
             entityField = classCraftEntity.getDeclaredField("entity");
             entityField.setAccessible(true);
         } catch (ClassNotFoundException | NoSuchFieldException e) {
@@ -62,12 +63,12 @@ public enum DeathHandler implements Listener {
         }
 
         //以下对需要的反射内容进行获取并获取死亡消息的格式
-        int objArrNum = 1;
+        int objArrNum;
         TranslatableContents nmsDeathMsg = getNmsDeathMsg(entityPlayer);
         deathCause = getNmsDeathCause(nmsDeathMsg);
         objArrNum = getMsgObjsLength(nmsDeathMsg);
 
-        String message = DataContainer.getMessage(deathCause);
+        String message = DataManager.getMessage(deadPlayer, deathCause);
         if (message == null) {
             LangUtil.msg(Bukkit.getConsoleSender(), "Death Cause " + deathCause + " is Missing");
             deathCause = deathCause.replace(".", "_");
@@ -94,7 +95,7 @@ public enum DeathHandler implements Listener {
         }
 
         //组装成完整的死亡消息组件
-        TranslatableComponent deathMsgComponent = new TranslatableComponent(LangUtil.color(message));
+        TranslatableComponent deathMsgComponent = new TranslatableComponent(LangUtil.color(message), objList.toArray());
 
         //发送死亡消息给没有屏蔽死亡消息的玩家
         for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
@@ -230,7 +231,7 @@ public enum DeathHandler implements Listener {
             UUID lastEntityUuid = entityHurtPlayerMap.get(deadPlayer.getUniqueId());
             if (lastEntityUuid == null || Bukkit.getEntity(lastEntityUuid) == null) {
                 //当不存在击杀实体时,说明玩家可能死于方块爆炸
-                String bedRespawnPoint = DataContainer.getMessage("bed_respawn_point");
+                String bedRespawnPoint = DataManager.getMessage(deadPlayer, "bed_respawn_point");
                 BaseComponent bedRespawnDisplayCompound = new TextComponent();
                 for (BaseComponent baseComponent : TextComponent.fromLegacyText(bedRespawnPoint)) {
                     bedRespawnDisplayCompound.addExtra(baseComponent);

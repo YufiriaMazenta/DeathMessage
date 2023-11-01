@@ -1,7 +1,7 @@
 package com.github.yufiriamazenta.deathmsg.commands;
 
 import com.github.yufiriamazenta.deathmsg.DeathMessage;
-import com.github.yufiriamazenta.deathmsg.data.DataContainer;
+import com.github.yufiriamazenta.deathmsg.data.DataManager;
 import com.github.yufiriamazenta.deathmsg.util.LangUtil;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -20,8 +20,8 @@ public class DeathMessageReloadCommand implements CommandExecutor {
         if ((commandSender instanceof Player) && !commandSender.isOp()) {
             return false;
         }
-        DataContainer.reloadMap();
-        String message = DeathMessage.INSTANCE.getConfig().getString("command_reload");
+        DataManager.reloadMap();
+        String message = DeathMessage.INSTANCE.getConfig().getString("plugin_message.command_reload");
         commandSender.sendMessage(LangUtil.color(message));
         return true;
     }

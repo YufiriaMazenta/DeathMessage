@@ -23,7 +23,7 @@ public enum FilterDeathMessageCmd implements TabExecutor {
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
         if (!(commandSender instanceof Player player)) {
-            LangUtil.msg(commandSender, "only_player");
+            LangUtil.msg(commandSender, "plugin_message.only_player");
             return true;
         }
         if (strings.length == 0) {
@@ -55,13 +55,13 @@ public enum FilterDeathMessageCmd implements TabExecutor {
     public void setFilterOn(Player player) {
         PersistentDataContainer dataContainer = player.getPersistentDataContainer();
         dataContainer.set(filterKey, PersistentDataType.BYTE, (byte)1);
-        LangUtil.msg(player, "filter_on");
+        LangUtil.msg(player, "plugin_message.filter_on");
     }
 
     public void setFilterOff(Player player) {
         PersistentDataContainer dataContainer = player.getPersistentDataContainer();
         dataContainer.set(filterKey, PersistentDataType.BYTE, (byte)0);
-        LangUtil.msg(player, "filter_off");
+        LangUtil.msg(player, "plugin_message.filter_off");
     }
 
     public NamespacedKey getFilterKey() {
