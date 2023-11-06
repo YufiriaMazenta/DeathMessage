@@ -6,18 +6,6 @@ api-version: 1.17
 load: POSTWORLD
 soft-depend: [ PlaceholderAPI ]
 folia-supported: true
-commands:
-  deathmessagereload:
-    aliases:
-      - "dmrl"
-    usage: "§4/dmrl"
-    description: "reload death message"
-    permission: "deathmessage.command.reload"
-    permission-message: "§4you are not op !"
-  deathmessagefilter:
-    aliases:
-      - 'dmf'
-    permission: deathmessage.command.filter
 permissions:
   deathmessage.command.filter:
     default: true

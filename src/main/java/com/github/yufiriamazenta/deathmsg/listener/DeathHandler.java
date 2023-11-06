@@ -1,7 +1,6 @@
 package com.github.yufiriamazenta.deathmsg.listener;
 
 import com.github.yufiriamazenta.deathmsg.DeathMessage;
-import com.github.yufiriamazenta.deathmsg.commands.FilterDeathMessageCmd;
 import com.github.yufiriamazenta.deathmsg.data.DataManager;
 import com.github.yufiriamazenta.deathmsg.util.LangUtil;
 import com.github.yufiriamazenta.deathmsg.util.NmsUtil;
@@ -112,7 +111,7 @@ public class DeathHandler implements Listener {
 
     private boolean isPlayerDeathMsgFilterOn(Player player) {
         PersistentDataContainer dataContainer = player.getPersistentDataContainer();
-        Byte val = dataContainer.get(FilterDeathMessageCmd.getFilterKey(), PersistentDataType.BYTE);
+        Byte val = dataContainer.get(DeathMessage.getInstance().getDeathMsgFilterKey(), PersistentDataType.BYTE);
         return val != null && val != 0;
     }
 

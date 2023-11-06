@@ -3,6 +3,7 @@ package com.github.yufiriamazenta.deathmsg.commands;
 import com.github.yufiriamazenta.deathmsg.DeathMessage;
 import com.github.yufiriamazenta.deathmsg.data.DataManager;
 import com.github.yufiriamazenta.deathmsg.util.LangUtil;
+import crypticlib.annotations.BukkitCommand;
 import crypticlib.command.IPluginCommand;
 import crypticlib.command.ISubCommand;
 import org.bukkit.command.Command;
@@ -15,7 +16,9 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.HashMap;
 import java.util.Map;
 
+@BukkitCommand(name = "deathmessagereload", perm = "deathmessage.command.reload", alias = {"dmrl"})
 public class DeathMessageReloadCommand implements IPluginCommand {
+
     @Override
     public Plugin getPlugin() {
         return DeathMessage.getInstance();
