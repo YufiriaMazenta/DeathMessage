@@ -6,6 +6,7 @@ import com.github.yufiriamazenta.deathmsg.data.DataManager;
 import com.github.yufiriamazenta.deathmsg.util.LangUtil;
 import com.github.yufiriamazenta.deathmsg.util.NmsUtil;
 import crypticlib.CrypticLib;
+import crypticlib.annotations.BukkitListener;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.md_5.bungee.api.chat.*;
 import net.md_5.bungee.api.chat.hover.content.Item;
@@ -31,9 +32,8 @@ import java.lang.reflect.Method;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-public enum DeathHandler implements Listener {
-
-    INSTANCE;
+@BukkitListener
+public class DeathHandler implements Listener {
 
     private Field entityField, deathCauseKeyField, combatTrackerField;
     private final Map<UUID, UUID> entityHurtPlayerMap;
@@ -112,7 +112,7 @@ public enum DeathHandler implements Listener {
 
     private boolean isPlayerDeathMsgFilterOn(Player player) {
         PersistentDataContainer dataContainer = player.getPersistentDataContainer();
-        Byte val = dataContainer.get(FilterDeathMessageCmd.INSTANCE.getFilterKey(), PersistentDataType.BYTE);
+        Byte val = dataContainer.get(FilterDeathMessageCmd.getFilterKey(), PersistentDataType.BYTE);
         return val != null && val != 0;
     }
 

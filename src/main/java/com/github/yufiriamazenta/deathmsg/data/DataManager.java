@@ -1,12 +1,14 @@
 package com.github.yufiriamazenta.deathmsg.data;
 
 import com.github.yufiriamazenta.deathmsg.DeathMessage;
-import crypticlib.util.MsgUtil;
 import crypticlib.util.YamlConfigUtil;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class DataManager {

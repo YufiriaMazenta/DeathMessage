@@ -2,23 +2,21 @@ package com.github.yufiriamazenta.deathmsg.commands;
 
 import com.github.yufiriamazenta.deathmsg.DeathMessage;
 import com.github.yufiriamazenta.deathmsg.util.LangUtil;
+import crypticlib.command.IPluginCommand;
+import crypticlib.command.ISubCommand;
 import org.bukkit.NamespacedKey;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.plugin.Plugin;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
-public enum FilterDeathMessageCmd implements TabExecutor {
+public class FilterDeathMessageCmd implements IPluginCommand {
 
-    INSTANCE;
-
-    private final NamespacedKey filterKey = new NamespacedKey(DeathMessage.INSTANCE, "death_msg_filter");
+    private static final NamespacedKey filterKey = new NamespacedKey(DeathMessage.INSTANCE, "death_msg_filter");
 
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
@@ -64,8 +62,13 @@ public enum FilterDeathMessageCmd implements TabExecutor {
         LangUtil.msg(player, "plugin_message.filter_off");
     }
 
-    public NamespacedKey getFilterKey() {
+    public static NamespacedKey getFilterKey() {
         return filterKey;
+    }
+
+    @Override
+    public Plugin getPlugin() {
+        return DeathMessage.getInstance();
     }
 
     @Override
@@ -79,5 +82,10 @@ public enum FilterDeathMessageCmd implements TabExecutor {
                 return Collections.singletonList("");
             }
         }
+    }
+
+    @Override
+    public Map<String, ISubCommand> subCommands() {
+        return new HashMap<>();
     }
 }

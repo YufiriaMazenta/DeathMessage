@@ -25,11 +25,11 @@ dependencies {
     compileOnly("org.spigotmc:spigot-api:1.19.4-R0.1-SNAPSHOT")
     compileOnly("net.luckperms:api:5.4")
     compileOnly("me.clip:placeholderapi:2.11.1")
-    implementation("com.github.YufiriaMazenta:CrypticLib:1.0.9")
+    implementation("com.github.YufiriaMazenta:CrypticLib:1.0.13")
 }
 
 group = "com.github.yufiriamazenta"
-version = "1.1.3"
+version = "1.1.4"
 description = "DeathMessage"
 java.sourceCompatibility = JavaVersion.VERSION_17
 java.sourceCompatibility = JavaVersion.VERSION_17
