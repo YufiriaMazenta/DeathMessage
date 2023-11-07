@@ -3,8 +3,8 @@ package com.github.yufiriamazenta.deathmsg.commands;
 import com.github.yufiriamazenta.deathmsg.DeathMessage;
 import com.github.yufiriamazenta.deathmsg.util.LangUtil;
 import crypticlib.annotations.BukkitCommand;
-import crypticlib.command.IPluginCommand;
-import crypticlib.command.ISubCommand;
+import crypticlib.command.IPluginCmdExecutor;
+import crypticlib.command.ISubCmdExecutor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -14,8 +14,8 @@ import org.bukkit.plugin.Plugin;
 
 import java.util.*;
 
-@BukkitCommand(name = "deathmessagefilter", alias = "dmf", perm = "deathmessage.command.filter")
-public class FilterDeathMessageCmd implements IPluginCommand {
+@BukkitCommand(name = "deathmessagefilter", alias = "dmf", permission = "deathmessage.command.filter")
+public class FilterDeathMessageCmd implements IPluginCmdExecutor {
 
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
@@ -80,7 +80,7 @@ public class FilterDeathMessageCmd implements IPluginCommand {
     }
 
     @Override
-    public Map<String, ISubCommand> subCommands() {
+    public Map<String, ISubCmdExecutor> subCommands() {
         return new HashMap<>();
     }
 }

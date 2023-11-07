@@ -4,10 +4,9 @@ import com.github.yufiriamazenta.deathmsg.DeathMessage;
 import com.github.yufiriamazenta.deathmsg.data.DataManager;
 import com.github.yufiriamazenta.deathmsg.util.LangUtil;
 import crypticlib.annotations.BukkitCommand;
-import crypticlib.command.IPluginCommand;
-import crypticlib.command.ISubCommand;
+import crypticlib.command.IPluginCmdExecutor;
+import crypticlib.command.ISubCmdExecutor;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -16,8 +15,8 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.HashMap;
 import java.util.Map;
 
-@BukkitCommand(name = "deathmessagereload", perm = "deathmessage.command.reload", alias = {"dmrl"})
-public class DeathMessageReloadCommand implements IPluginCommand {
+@BukkitCommand(name = "deathmessagereload", permission = "deathmessage.command.reload", alias = {"dmrl"})
+public class DeathMessageReloadCommand implements IPluginCmdExecutor {
 
     @Override
     public Plugin getPlugin() {
@@ -40,7 +39,7 @@ public class DeathMessageReloadCommand implements IPluginCommand {
     }
 
     @Override
-    public Map<String, ISubCommand> subCommands() {
+    public Map<String, ISubCmdExecutor> subCommands() {
         return new HashMap<>();
     }
 }
