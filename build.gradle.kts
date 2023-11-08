@@ -15,7 +15,9 @@ repositories {
     maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
     maven("https://repo.purpurmc.org/snapshots")
     maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
-    maven("https://jitpack.io")
+    maven("http://repo.crypticlib.com:8081/repository/maven-public/") {
+        isAllowInsecureProtocol = true
+    }
     maven("https://repo.papermc.io/repository/maven-public/")
     mavenCentral()
 }
@@ -25,11 +27,11 @@ dependencies {
     compileOnly("org.spigotmc:spigot-api:1.19.4-R0.1-SNAPSHOT")
     compileOnly("net.luckperms:api:5.4")
     compileOnly("me.clip:placeholderapi:2.11.1")
-    implementation("com.crypticlib:crypticlib:0.0.1")
+    implementation("com.crypticlib:CrypticLib:0.0.1")
 }
 
 group = "com.github.yufiriamazenta"
-version = "1.1.7"
+version = "1.1.6"
 description = "DeathMessage"
 java.sourceCompatibility = JavaVersion.VERSION_17
 java.sourceCompatibility = JavaVersion.VERSION_17
