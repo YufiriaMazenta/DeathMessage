@@ -33,7 +33,7 @@ dependencies {
 }
 
 group = "com.github.yufiriamazenta"
-version = "1.1.8"
+version = "1.1.9"
 description = "DeathMessage"
 
 publishing {
@@ -66,5 +66,5 @@ tasks {
     }
 }
 kotlin {
-    jvmToolchain(8)
+    jvmToolchain(17)
 }

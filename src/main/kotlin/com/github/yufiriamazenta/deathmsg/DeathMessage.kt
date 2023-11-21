@@ -28,8 +28,8 @@ class DeathMessage: BukkitPlugin() {
 
     fun isPlayerDeathMsgFilterOn(player: Player): Boolean {
         val dataContainer = player.persistentDataContainer
-        val filterSwitch = dataContainer[DEATH_MESSAGE.deathMessageFilterKey, PersistentDataType.BYTE]
-        return filterSwitch != null && filterSwitch.toInt() != 0
+        val filterFlag = dataContainer[deathMessageFilterKey, PersistentDataType.BYTE]
+        return filterFlag != null && filterFlag.toInt() != 0
     }
 
 }
