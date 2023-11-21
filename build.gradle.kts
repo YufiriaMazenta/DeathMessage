@@ -4,6 +4,7 @@ plugins {
     `java-library`
     `maven-publish`
     id("com.github.johnrengelman.shadow").version("7.1.2")
+    kotlin("jvm") version "1.9.20"
 }
 
 repositories {
@@ -27,14 +28,13 @@ dependencies {
     compileOnly("org.spigotmc:spigot-api:1.19.4-R0.1-SNAPSHOT")
     compileOnly("net.luckperms:api:5.4")
     compileOnly("me.clip:placeholderapi:2.11.1")
-    implementation("com.crypticlib:CrypticLib:0.0.1")
+    implementation("com.crypticlib:CrypticLib:0.2.3")
+    implementation(kotlin("stdlib-jdk8"))
 }
 
 group = "com.github.yufiriamazenta"
-version = "1.1.6"
+version = "1.1.8"
 description = "DeathMessage"
-java.sourceCompatibility = JavaVersion.VERSION_17
-java.sourceCompatibility = JavaVersion.VERSION_17
 
 publishing {
     publications.create<MavenPublication>("maven") {
@@ -60,5 +60,11 @@ tasks {
     shadowJar {
         archiveFileName.set("DeathMessage-$version.jar")
         relocate("crypticlib", "com.github.yufiriamazenta.deathmsg.crypticlib")
+        relocate("kotlin", "com.github.yufiriamazenta.deathmsg.libs.kotlin")
+        relocate("org.intellij.lang.annotations", "com.github.yufiriamazenta.deathmsg.libs.intellij.lang.annotations")
+        relocate("org.jetbrains.annotations", "com.github.yufiriamazenta.deathmsg.libs.jetbrains.annotations")
     }
+}
+kotlin {
+    jvmToolchain(8)
 }

@@ -9,6 +9,8 @@ death_message:
     - perm: deathmessage.perm.default
       message:
         - "%1$s死了"
+  death_attack_genericKill:
+    - "%1$s被杀死了"
   death_attack_anvil:
     - "%1$s被坠落的铁砧压扁了"
   death_attack_anvil_player:
