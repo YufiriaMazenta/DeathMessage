@@ -1,6 +1,8 @@
 player_name_format: "%player_displayname%"
 item_default_format: "&r%item_name%"
 item_enchanted_format: "&b%item_name%"
+#死亡消息展示的地方，支持chat（聊天栏）和action_bar（物品栏上方）和all（同时chat和action_bar），默认为chat
+death_message_type: chat
 death_message:
   death_attack_generic:
     - perm: deathmessage.perm.vip

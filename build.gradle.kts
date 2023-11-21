@@ -7,6 +7,9 @@ plugins {
     kotlin("jvm") version "1.9.20"
 }
 
+group = "com.github.yufiriamazenta"
+version = "1.2.0"
+
 repositories {
     mavenLocal()
     maven("https://repo.codemc.io/repository/nms/")
@@ -31,10 +34,6 @@ dependencies {
     implementation("com.crypticlib:CrypticLib:0.2.3")
     implementation(kotlin("stdlib-jdk8"))
 }
-
-group = "com.github.yufiriamazenta"
-version = "1.1.9"
-description = "DeathMessage"
 
 publishing {
     publications.create<MavenPublication>("maven") {

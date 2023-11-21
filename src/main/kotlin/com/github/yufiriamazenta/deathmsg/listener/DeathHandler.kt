@@ -8,6 +8,7 @@ import crypticlib.listener.BukkitListener
 import crypticlib.util.MsgUtil
 import crypticlib.util.TextUtil
 import me.clip.placeholderapi.PlaceholderAPI
+import net.md_5.bungee.api.ChatMessageType
 import net.md_5.bungee.api.chat.*
 import net.md_5.bungee.api.chat.hover.content.Item
 import net.minecraft.network.chat.ComponentContents
@@ -22,7 +23,6 @@ import org.bukkit.event.Listener
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.inventory.ItemStack
-import org.bukkit.persistence.PersistentDataType
 import java.lang.reflect.Field
 import java.lang.reflect.InvocationTargetException
 import java.lang.reflect.Method
@@ -99,12 +99,24 @@ class DeathHandler: Listener {
         //组装成完整的死亡消息组件
         val deathMsgComponent = TranslatableComponent(TextUtil.color(message), *objList.toTypedArray())
 
+        val chatMessageTypeStr = DEATH_MESSAGE.config.getString("death_message_type", "chat")!!.uppercase()
+        val chatMessageType = try {
+            ChatMessageType.valueOf(chatMessageTypeStr)
+        } catch (e: Exception) {
+            ChatMessageType.CHAT
+        }
+
         //发送死亡消息给没有屏蔽死亡消息的玩家
         for (onlinePlayer in Bukkit.getOnlinePlayers()) {
             if (deadPlayer != onlinePlayer) {
                 if (DEATH_MESSAGE.isPlayerDeathMsgFilterOn(onlinePlayer)) continue
             }
-            onlinePlayer.spigot().sendMessage(deathMsgComponent)
+            if (chatMessageTypeStr != "ALL")
+                onlinePlayer.spigot().sendMessage(chatMessageType, deathMsgComponent)
+            else {
+                onlinePlayer.spigot().sendMessage(ChatMessageType.CHAT, deathMsgComponent)
+                onlinePlayer.spigot().sendMessage(ChatMessageType.ACTION_BAR, deathMsgComponent)
+            }
         }
         Bukkit.getConsoleSender().spigot().sendMessage(deathMsgComponent)
         entityHurtPlayerMap.remove(deadPlayer.uniqueId)
