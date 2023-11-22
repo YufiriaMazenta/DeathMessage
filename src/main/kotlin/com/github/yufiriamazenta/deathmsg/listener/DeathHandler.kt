@@ -99,11 +99,16 @@ class DeathHandler: Listener {
         //组装成完整的死亡消息组件
         val deathMsgComponent = TranslatableComponent(TextUtil.color(message), *objList.toTypedArray())
 
+        //当为all时直接让其为null,下面判断两种方式都发送
         val chatMessageTypeStr = DEATH_MESSAGE.config.getString("death_message_type", "chat")!!.uppercase()
-        val chatMessageType = try {
-            ChatMessageType.valueOf(chatMessageTypeStr)
-        } catch (e: Exception) {
-            ChatMessageType.CHAT
+        val chatMessageType = if (chatMessageTypeStr != "ALL") {
+            try {
+                ChatMessageType.valueOf(chatMessageTypeStr)
+            } catch (e: Exception) {
+                ChatMessageType.CHAT
+            }
+        } else {
+            null
         }
 
         //发送死亡消息给没有屏蔽死亡消息的玩家
@@ -111,7 +116,7 @@ class DeathHandler: Listener {
             if (deadPlayer != onlinePlayer) {
                 if (DEATH_MESSAGE.isPlayerDeathMsgFilterOn(onlinePlayer)) continue
             }
-            if (chatMessageTypeStr != "ALL")
+            if (chatMessageType != null)
                 onlinePlayer.spigot().sendMessage(chatMessageType, deathMsgComponent)
             else {
                 onlinePlayer.spigot().sendMessage(ChatMessageType.CHAT, deathMsgComponent)
