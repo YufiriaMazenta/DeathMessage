@@ -212,9 +212,11 @@ class DeathHandler: Listener {
     }
 
     private fun getDeadPlayerComponent(deadPlayer: Player, displayNameFormat: String): BaseComponent {
-        val deadPlayerDisplayName: String = if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) TextUtil.color(
+        var deadPlayerDisplayName: String = if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) TextUtil.color(
             PlaceholderAPI.setPlaceholders(deadPlayer, displayNameFormat)
-        ) else TextUtil.color(deadPlayer.displayName)
+        ) else
+            deadPlayer.displayName
+        deadPlayerDisplayName = TextUtil.color(deadPlayerDisplayName)
         val deadPlayerDisplayCompound: BaseComponent = TextComponent()
         for (baseComponent in TextComponent.fromLegacyText(deadPlayerDisplayName)) {
             deadPlayerDisplayCompound.addExtra(baseComponent)
@@ -225,11 +227,11 @@ class DeathHandler: Listener {
     private fun getKillerComponent(deadPlayer: Player, displayNameFormat: String): BaseComponent {
         return if (deadPlayer.killer != null) {
             //当玩家存在击杀者时,返回击杀者的名字
-            val killerDisplayNameStr: String = if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) TextUtil.color(
+            var killerDisplayNameStr: String = if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) TextUtil.color(
                 PlaceholderAPI.setPlaceholders(deadPlayer.killer, displayNameFormat)
-            ) else TextUtil.color(
+            ) else
                 deadPlayer.killer!!.displayName
-            )
+            killerDisplayNameStr = TextUtil.color(killerDisplayNameStr)
             val killerDisplayCompound: BaseComponent = TextComponent()
             for (baseComponent in TextComponent.fromLegacyText(killerDisplayNameStr)) {
                 killerDisplayCompound.addExtra(baseComponent)
@@ -287,6 +289,7 @@ class DeathHandler: Listener {
             DEATH_MESSAGE.getConfig().getString("item_enchanted_format", "&r%item_name%")!!
         }
         itemName = itemNameFormat.replace("%item_name%", "[$itemName]")
+        itemName = TextUtil.color(itemName)
         val tag = getItemTagJson(handItem)
         val itemDisplayCompound: BaseComponent = TextComponent()
         for (itemNameCompound in TextComponent.fromLegacyText(itemName)) {
