@@ -284,11 +284,11 @@ class DeathHandler: Listener {
             }
         }
         val itemNameFormat: String = if (handItem.enchantments.isEmpty()) {
-            DEATH_MESSAGE.getConfig().getString("item_default_format", "&r%item_name%")!!
+            DEATH_MESSAGE.getConfig().getString("item_default_format", "&r[%item_name%&r]")!!
         } else {
-            DEATH_MESSAGE.getConfig().getString("item_enchanted_format", "&r%item_name%")!!
+            DEATH_MESSAGE.getConfig().getString("item_enchanted_format", "&b[%item_name%&b]")!!
         }
-        itemName = itemNameFormat.replace("%item_name%", "[$itemName]")
+        itemName = itemNameFormat.replace("%item_name%", itemName)
         itemName = TextUtil.color(itemName)
         val tag = getItemTagJson(handItem)
         val itemDisplayCompound: BaseComponent = TextComponent()
