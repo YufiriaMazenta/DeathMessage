@@ -30,6 +30,13 @@ object DataManager {
         }
     }
 
+    fun addDeathMessage(deathCause: String, deathMessages: MutableList<String>) {
+        val saveKey: String = deathCause.replace(".", "_")
+        deathMsgMap[deathCause] = deathMessages
+        DEATH_MESSAGE.config.set("death_message.$saveKey", deathMessages)
+        DEATH_MESSAGE.saveConfig()
+    }
+
     private fun hasDeathCause(deathCause: String): Boolean {
         return deathMsgMap.containsKey(deathCause)
     }

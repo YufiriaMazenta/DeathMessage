@@ -58,7 +58,7 @@ class DeathHandler: Listener {
     fun onPlayerDeathReplaceMessage(event: PlayerDeathEvent) {
         //以下获取死亡玩家的nms对象
         val deadPlayer = event.entity
-        var deathCause: String
+        val deathCause: String
         val entityPlayer: EntityPlayer = try {
             entityField!![deadPlayer] as EntityPlayer
         } catch (e: IllegalAccessException) {
@@ -66,15 +66,14 @@ class DeathHandler: Listener {
         }
 
         //以下对需要的反射内容进行获取并获取死亡消息的格式
-        val objArrNum: Int
+        val objArrLength: Int
         val nmsDeathMsg = getNmsDeathMsg(entityPlayer)
         deathCause = getNmsDeathCause(nmsDeathMsg)
-        objArrNum = getMsgObjsLength(nmsDeathMsg)
+        objArrLength = getMsgObjsLength(nmsDeathMsg)
         val message = DataManager.getMessage(deadPlayer, deathCause)
         if (message == null) {
             MsgUtil.sendMsg(Bukkit.getConsoleSender(), "Death Cause $deathCause is Missing")
-            deathCause = deathCause.replace(".", "_")
-            DEATH_MESSAGE.getConfig().set(deathCause, deathCause)
+            DataManager.addDeathMessage(deathCause, mutableListOf(deathCause))
             return
         }
 
@@ -87,12 +86,12 @@ class DeathHandler: Listener {
         objList.add(getDeadPlayerComponent(deadPlayer, displayNameFormat))
 
         //当对象数量大于2等于2时,意味着有击杀者
-        if (objArrNum >= 2) {
+        if (objArrLength >= 2) {
             objList.add(getKillerComponent(deadPlayer, displayNameFormat))
         }
 
         //当有三个以上对象时,说明有使用的武器
-        if (objArrNum >= 3) {
+        if (objArrLength >= 3) {
             objList.add(getKillItemComponent(deadPlayer))
         }
 
@@ -247,7 +246,7 @@ class DeathHandler: Listener {
             val lastEntityUuid = entityHurtPlayerMap[deadPlayer.uniqueId]
             if (lastEntityUuid == null || Bukkit.getEntity(lastEntityUuid) == null) {
                 //当不存在击杀实体时,说明玩家可能死于方块爆炸
-                val bedRespawnPoint = DataManager.getMessage(deadPlayer, "bed_respawn_point")
+                val bedRespawnPoint = DataManager.getMessage(deadPlayer, "bed.respawn.point")?: "[刻意的游戏设计]"
                 val bedRespawnDisplayCompound: BaseComponent = TextComponent()
                 for (baseComponent in TextComponent.fromLegacyText(bedRespawnPoint)) {
                     bedRespawnDisplayCompound.addExtra(baseComponent)
