@@ -2,15 +2,14 @@ package com.github.yufiriamazenta.deathmsg.listener
 
 import com.github.yufiriamazenta.deathmsg.DEATH_MESSAGE
 import com.github.yufiriamazenta.deathmsg.data.DataManager
-import com.github.yufiriamazenta.deathmsg.util.NmsUtil.getItemTagJson
 import crypticlib.CrypticLib
 import crypticlib.listener.BukkitListener
+import crypticlib.nms.item.ItemFactory
 import crypticlib.util.MsgUtil
 import crypticlib.util.TextUtil
 import me.clip.placeholderapi.PlaceholderAPI
 import net.md_5.bungee.api.ChatMessageType
 import net.md_5.bungee.api.chat.*
-import net.md_5.bungee.api.chat.hover.content.Item
 import net.minecraft.network.chat.ComponentContents
 import net.minecraft.network.chat.IChatBaseComponent
 import net.minecraft.network.chat.contents.TranslatableContents
@@ -294,15 +293,9 @@ class DeathHandler: Listener {
         }
         itemName = itemNameFormat.replace("%item_name%", itemName)
         itemName = TextUtil.color(itemName)
-        val tag = getItemTagJson(handItem)
         val itemDisplayCompound: BaseComponent = TextComponent()
-        for (itemNameCompound in TextComponent.fromLegacyText(itemName)) {
-            itemNameCompound.hoverEvent = HoverEvent(
-                HoverEvent.Action.SHOW_ITEM,
-                Item(handItem.type.getKey().toString(), handItem.amount, ItemTag.ofNbt(tag))
-            )
-            itemDisplayCompound.addExtra(itemNameCompound)
-        }
+        itemDisplayCompound.extra = TextComponent.fromLegacyText(itemName).toMutableList()
+        itemDisplayCompound.hoverEvent = ItemFactory.item(handItem).toHover();
         return itemDisplayCompound
     }
 
