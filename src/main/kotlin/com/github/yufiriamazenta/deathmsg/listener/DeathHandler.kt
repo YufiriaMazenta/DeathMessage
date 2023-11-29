@@ -2,7 +2,6 @@ package com.github.yufiriamazenta.deathmsg.listener
 
 import com.github.yufiriamazenta.deathmsg.DEATH_MESSAGE
 import com.github.yufiriamazenta.deathmsg.data.DataManager
-import crypticlib.CrypticLib
 import crypticlib.listener.BukkitListener
 import crypticlib.nms.item.ItemFactory
 import crypticlib.util.MsgUtil
@@ -31,25 +30,15 @@ import java.util.concurrent.ConcurrentHashMap
 @BukkitListener
 class DeathHandler: Listener {
 
-    private var entityField: Field? = null
     private var deathCauseKeyField: Field? = null
     private var combatTrackerField: Field? = null
     private val entityHurtPlayerMap: MutableMap<UUID, UUID>
+    private var entityGetHandleMethod: Method? = null
     private var toChatMethod: Method? = null
     private var getComponentContentsMethod: Method? = null
     private var getObjsMethod: Method? = null
 
     init {
-        try {
-            val classCraftEntity =
-                Class.forName("org.bukkit.craftbukkit." + CrypticLib.nmsVersion() + ".entity.CraftEntity")
-            entityField = classCraftEntity.getDeclaredField("entity")
-            entityField!!.setAccessible(true)
-        } catch (e: ClassNotFoundException) {
-            e.printStackTrace()
-        } catch (e: NoSuchFieldException) {
-            e.printStackTrace()
-        }
         entityHurtPlayerMap = ConcurrentHashMap()
     }
 
@@ -59,7 +48,9 @@ class DeathHandler: Listener {
         val deadPlayer = event.entity
         val deathCause: String
         val entityPlayer: EntityPlayer = try {
-            entityField!![deadPlayer] as EntityPlayer
+            if (entityGetHandleMethod == null)
+                entityGetHandleMethod = deadPlayer.javaClass.getMethod("getHandle")
+            entityGetHandleMethod!!.invoke(deadPlayer) as EntityPlayer
         } catch (e: IllegalAccessException) {
             throw RuntimeException(e)
         }
@@ -206,10 +197,8 @@ class DeathHandler: Listener {
             val objects = getObjsMethod!!.invoke(nmsDeathMsg) as Array<*>
             objects.size
         } catch (e: IllegalAccessException) {
-            e.printStackTrace()
             1
         } catch (e: InvocationTargetException) {
-            e.printStackTrace()
             1
         }
     }
