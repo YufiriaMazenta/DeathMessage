@@ -20,7 +20,7 @@ object DataManager {
     fun reloadData() {
         deathMsgMap.clear()
         DEATH_MESSAGE.reloadConfig()
-        val config: FileConfiguration = DEATH_MESSAGE.getConfig()
+        val config: FileConfiguration = DEATH_MESSAGE.config
         for (key in config.getConfigurationSection("death_message")!!.getKeys(false)) {
             deathMsgMap[key.replace("_", ".")] = YamlConfigUtil.configList2List(
                 config.getList(

@@ -4,15 +4,6 @@ item_enchanted_format: "&b[%item_name%&b]"
 #死亡消息展示的地方，支持chat（聊天栏）和action_bar（物品栏上方）和all（同时chat和action_bar），默认为chat
 death_message_type: chat
 death_message:
-  death_attack_generic:
-    - perm: deathmessage.perm.vip
-      message:
-        - "%1$s死于世界法则"
-    - perm: deathmessage.perm.default
-      message:
-        - "%1$s死了"
-  death_attack_genericKill:
-    - "%1$s被杀死了"
   death_attack_anvil:
     - "%1$s被坠落的铁砧压扁了"
   death_attack_anvil_player:
@@ -23,7 +14,7 @@ death_message:
     - "%1$s被%2$s用%3$s射杀"
   death_attack_badRespawnPoint_message:
     - "%1$s被%2$s杀死了"
-  bed_respawn_point:
+  bad_respawn_point:
     - "[刻意的游戏设计]"
   death_attack_cactus:
     - "%1$s被戳死了"
@@ -83,8 +74,14 @@ death_message:
     - "%1$s被冻死了"
   death_attack_freeze_player:
     - "%1$s被%2$s冻死了"
+  death_attack_generic:
+    - "%1$s死了"
   death_attack_generic_player:
     - "%1$s死于%2$s"
+  death_attack_genericKill:
+    - "%1$s被杀死了"
+  death_attack_genericKill_player:
+    - "%1$s在与%2$s战斗时被杀死了"
   death_attack_hotFloor:
     - "%1$s发现了地板是熔岩做的"
   death_attack_hotFloor_player:
@@ -113,6 +110,8 @@ death_message:
     - "%1$s被魔法杀死了"
   death_attack_magic_player:
     - "%1$s在试图逃离%2$s时被魔法杀死了"
+  death_attack_message_too_long:
+    - "死亡文本过长，原文：%s"
   death_attack_mob:
     - "%1$s被%2$s杀死了"
   death_attack_mob_item:
@@ -121,14 +120,26 @@ death_message:
     - "%1$s被烧死了"
   death_attack_onFire_player:
     - "%1$s在与%2$s战斗时被烤得酥脆"
+  death_attack_onFire_item:
+    - "%1$s在与持有%3$s的%2$s战斗时被烤得酥脆"
   death_attack_outOfWorld:
     - "%1$s掉出了这个世界"
   death_attack_outOfWorld_player:
     - "%1$s与%2$s不共戴天"
+  death_attack_outsideBorder:
+    - "%1$s脱离了这个世界"
+  death_attack_outsideBorder_player:
+    - "%1$s在与%2$s战斗时脱离了这个世界"
   death_attack_player:
     - "%1$s被%2$s杀死了"
   death_attack_player_item:
     - "%1$s被%2$s用%3$s杀死了"
+  death_attack_sonic_boom:
+    - "%1$s被一道音波尖啸抹除了"
+  death_attack_sonic_boom_item:
+    - "%1$s在试图逃离持有%2$s的%3$s时被一道音波尖啸抹除了"
+  death_attack_sonic_boom_player:
+    - "%1$s在试图逃离%2$s时被一道音波尖啸抹除了"
   death_attack_stalagmite:
     - "%1$s被石笋刺穿了"
   death_attack_stalagmite_player:
@@ -139,6 +150,8 @@ death_message:
     - "%1$s在与%2$s战斗时饿死了"
   death_attack_sting:
     - "%1$s被蛰死了"
+  death_attack_sting_item:
+    - "%1$s被%2$s使用%3$s蛰死了"
   death_attack_sting_player:
     - "%1$s被%2$s蛰死了"
   death_attack_sweetBerryBush:
@@ -163,6 +176,8 @@ death_message:
     - "%1$s在与%2$s战斗时凋零了"
   death_attack_witherSkull:
     - "%1$s被%2$s发射的头颅射杀"
+  death_attack_witherSkull_item:
+    - "%1$s被%2$s使用%3$s发射的头颅射杀"
   death_fell_accident_generic:
     - "%1$s从高处摔了下来"
   death_fell_accident_ladder:

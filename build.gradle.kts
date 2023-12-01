@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "com.github.yufiriamazenta"
-version = "1.2.7"
+version = "1.2.8"
 
 repositories {
     mavenLocal()
@@ -31,7 +31,7 @@ dependencies {
     compileOnly("org.spigotmc:spigot-api:1.19.4-R0.1-SNAPSHOT")
     compileOnly("net.luckperms:api:5.4")
     compileOnly("me.clip:placeholderapi:2.11.1")
-    implementation("com.crypticlib:CrypticLib:0.3.6")
+    implementation("com.crypticlib:CrypticLib:0.4.2")
     implementation(kotlin("stdlib-jdk8"))
 }
 

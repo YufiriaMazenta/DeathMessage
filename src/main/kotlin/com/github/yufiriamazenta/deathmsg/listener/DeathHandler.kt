@@ -234,7 +234,7 @@ class DeathHandler: Listener {
             val lastEntityUuid = entityHurtPlayerMap[deadPlayer.uniqueId]
             if (lastEntityUuid == null || Bukkit.getEntity(lastEntityUuid) == null) {
                 //当不存在击杀实体时,说明玩家可能死于方块爆炸
-                val bedRespawnPoint = DataManager.getMessage(deadPlayer, "bed.respawn.point")?: "[刻意的游戏设计]"
+                val bedRespawnPoint = DataManager.getMessage(deadPlayer, "bad.respawn.point")?: "[刻意的游戏设计]"
                 val bedRespawnDisplayCompound: BaseComponent = TextComponent()
                 for (baseComponent in TextComponent.fromLegacyText(bedRespawnPoint)) {
                     bedRespawnDisplayCompound.addExtra(baseComponent)
