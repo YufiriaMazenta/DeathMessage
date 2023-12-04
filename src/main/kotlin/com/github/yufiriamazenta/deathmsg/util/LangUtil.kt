@@ -12,7 +12,7 @@ object LangUtil {
 
     fun sendLang(receiver: CommandSender?, msgKey: String?, formatMap: Map<String, String>?) {
         val message = DEATH_MESSAGE.config.getString(msgKey!!, msgKey)
-        MsgUtil.sendMsg(receiver, message, formatMap?: HashMap<String, String>())
+        MsgUtil.sendMsg(receiver!!, message, formatMap?: HashMap<String, String>())
     }
 
 }
