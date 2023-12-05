@@ -5,7 +5,12 @@ item_enchanted_format: "&b[%item_name%&b]"
 death_message_type: chat
 death_message:
   death_attack_anvil:
-    - "%1$s被坠落的铁砧压扁了"
+    - perm: deathmessage.perm.vip
+      message:
+        - "%1$s被铁砧砸中了"
+    - perm: deathmessage.perm.default
+      message:
+        - "%1$s被坠落的铁砧压扁了"
   death_attack_anvil_player:
     - "%1$s在与%2$s战斗时被坠落的铁砧压扁了"
   death_attack_arrow:
