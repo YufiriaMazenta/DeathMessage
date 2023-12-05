@@ -18,6 +18,7 @@ repositories {
     maven("https://oss.sonatype.org/content/repositories/central")
     maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
     maven("https://repo.purpurmc.org/snapshots")
+    maven("https://mvn.lumine.io/repository/maven-public/")
     maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
     maven("http://repo.crypticlib.com:8081/repository/maven-public/") {
         isAllowInsecureProtocol = true
@@ -31,6 +32,7 @@ dependencies {
     compileOnly("org.spigotmc:spigot-api:1.19.4-R0.1-SNAPSHOT")
     compileOnly("net.luckperms:api:5.4")
     compileOnly("me.clip:placeholderapi:2.11.1")
+    compileOnly("io.lumine:Mythic-Dist:5.3.5")
     implementation("com.crypticlib:CrypticLib:0.5.2")
     implementation(kotlin("stdlib-jdk8"))
 }
