@@ -2,10 +2,10 @@ package com.github.yufiriamazenta.deathmsg.listener
 
 import com.github.yufiriamazenta.deathmsg.DEATH_MESSAGE
 import com.github.yufiriamazenta.deathmsg.data.DataManager
+import crypticlib.chat.MessageSender
+import crypticlib.chat.TextProcessor
 import crypticlib.listener.BukkitListener
 import crypticlib.nms.item.ItemFactory
-import crypticlib.util.MsgUtil
-import crypticlib.util.TextUtil
 import me.clip.placeholderapi.PlaceholderAPI
 import net.md_5.bungee.api.ChatMessageType
 import net.md_5.bungee.api.chat.*
@@ -60,10 +60,14 @@ class DeathHandler: Listener {
         val nmsDeathMsg = getNmsDeathMsg(entityPlayer)
         deathCause = getNmsDeathCause(nmsDeathMsg)
         objArrLength = getMsgObjsLength(nmsDeathMsg)
+        if (!DataManager.hasDeathCause(deathCause)) {
+            MessageSender.sendMsg(Bukkit.getConsoleSender(), "Death Cause $deathCause is Missing")
+            DataManager.addDeathMessage(deathCause, mutableListOf(deathCause))
+            return
+        }
         val message = DataManager.getMessage(deadPlayer, deathCause)
         if (message == null) {
-            MsgUtil.sendMsg(Bukkit.getConsoleSender(), "Death Cause $deathCause is Missing")
-            DataManager.addDeathMessage(deathCause, mutableListOf(deathCause))
+            event.deathMessage = null
             return
         }
 
@@ -86,7 +90,7 @@ class DeathHandler: Listener {
         }
 
         //组装成完整的死亡消息组件
-        val deathMsgComponent = TranslatableComponent(TextUtil.color(message), *objList.toTypedArray())
+        val deathMsgComponent = TranslatableComponent(TextProcessor.color(message), *objList.toTypedArray())
 
         //当为all时直接让其为null,下面判断两种方式都发送
         val chatMessageTypeStr = DEATH_MESSAGE.config.getString("death_message_type", "chat")!!.uppercase()
@@ -204,26 +208,28 @@ class DeathHandler: Listener {
     }
 
     private fun getDeadPlayerComponent(deadPlayer: Player, displayNameFormat: String): BaseComponent {
-        var deadPlayerDisplayName: String = if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) TextUtil.color(
-            PlaceholderAPI.setPlaceholders(deadPlayer, displayNameFormat)
-        ) else
-            deadPlayer.displayName
-        deadPlayerDisplayName = TextUtil.color(deadPlayerDisplayName)
+        var deadPlayerDisplayName =
+            if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null)
+                TextProcessor.color(PlaceholderAPI.setPlaceholders(deadPlayer, displayNameFormat))
+            else
+                deadPlayer.displayName
+        deadPlayerDisplayName = TextProcessor.color(deadPlayerDisplayName)
         val deadPlayerDisplayCompound: BaseComponent = TextComponent()
         for (baseComponent in TextComponent.fromLegacyText(deadPlayerDisplayName)) {
             deadPlayerDisplayCompound.addExtra(baseComponent)
         }
+
         return deadPlayerDisplayCompound
     }
 
     private fun getKillerComponent(deadPlayer: Player, displayNameFormat: String): BaseComponent {
         return if (deadPlayer.killer != null) {
             //当玩家存在击杀者时,返回击杀者的名字
-            var killerDisplayNameStr: String = if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) TextUtil.color(
+            var killerDisplayNameStr: String = if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) TextProcessor.color(
                 PlaceholderAPI.setPlaceholders(deadPlayer.killer, displayNameFormat)
             ) else
                 deadPlayer.killer!!.displayName
-            killerDisplayNameStr = TextUtil.color(killerDisplayNameStr)
+            killerDisplayNameStr = TextProcessor.color(killerDisplayNameStr)
             val killerDisplayCompound: BaseComponent = TextComponent()
             for (baseComponent in TextComponent.fromLegacyText(killerDisplayNameStr)) {
                 killerDisplayCompound.addExtra(baseComponent)
@@ -276,12 +282,12 @@ class DeathHandler: Listener {
             }
         }
         val itemNameFormat: String = if (handItem.enchantments.isEmpty()) {
-            DEATH_MESSAGE.getConfig().getString("item_default_format", "&r[%item_name%&r]")!!
+            DEATH_MESSAGE.config.getString("item_default_format", "&r[%item_name%&r]")!!
         } else {
-            DEATH_MESSAGE.getConfig().getString("item_enchanted_format", "&b[%item_name%&b]")!!
+            DEATH_MESSAGE.config.getString("item_enchanted_format", "&b[%item_name%&b]")!!
         }
         itemName = itemNameFormat.replace("%item_name%", itemName)
-        itemName = TextUtil.color(itemName)
+        itemName = TextProcessor.color(itemName)
         val itemDisplayCompound: BaseComponent = TextComponent()
         itemDisplayCompound.extra = TextComponent.fromLegacyText(itemName).toMutableList()
         itemDisplayCompound.hoverEvent = ItemFactory.item(handItem).toHover();

@@ -10,7 +10,7 @@ import java.util.concurrent.ConcurrentHashMap
 object DataManager {
 
     private val deathMsgMap: MutableMap<String, List<*>>
-    private var random: Random?
+    private var random: Random
 
     init {
         deathMsgMap = ConcurrentHashMap()
@@ -37,7 +37,7 @@ object DataManager {
         DEATH_MESSAGE.saveConfig()
     }
 
-    private fun hasDeathCause(deathCause: String): Boolean {
+    fun hasDeathCause(deathCause: String): Boolean {
         return deathMsgMap.containsKey(deathCause)
     }
 
@@ -54,9 +54,9 @@ object DataManager {
                         break
                     }
                 }
-                return if (messageList.isEmpty()) null else messageList[random!!.nextInt(messageList.size)]
+                return if (messageList.isEmpty()) null else messageList[random.nextInt(messageList.size)]
             } else if (list[0] is String) {
-                return list[random!!.nextInt(list.size)] as String?
+                return list[random.nextInt(list.size)] as String?
             }
         }
         return null

@@ -2,9 +2,9 @@ package com.github.yufiriamazenta.deathmsg.commands
 
 import com.github.yufiriamazenta.deathmsg.DEATH_MESSAGE
 import com.github.yufiriamazenta.deathmsg.data.DataManager.reloadData
+import crypticlib.chat.MessageSender
 import crypticlib.command.BukkitCommand
 import crypticlib.command.impl.RootCmdExecutor
-import crypticlib.util.MsgUtil
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
@@ -26,7 +26,7 @@ class DeathMessageReloadCommand : RootCmdExecutor() {
         }
         reloadData()
         val message: String = DEATH_MESSAGE.getConfig().getString("plugin_message.command_reload")?: "DeathMessage Reloaded"
-        MsgUtil.sendMsg(commandSender, message)
+        MessageSender.sendMsg(commandSender, message)
         return true
     }
 

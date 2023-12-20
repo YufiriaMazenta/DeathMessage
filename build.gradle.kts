@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "com.github.yufiriamazenta"
-version = "1.2.9"
+version = "1.3.0-dev1"
 
 repositories {
     mavenLocal()
@@ -33,7 +33,7 @@ dependencies {
     compileOnly("net.luckperms:api:5.4")
     compileOnly("me.clip:placeholderapi:2.11.1")
     compileOnly("io.lumine:Mythic-Dist:5.3.5")
-    implementation("com.crypticlib:CrypticLib:0.5.2")
+    implementation("com.crypticlib:CrypticLib:0.9.3")
     implementation(kotlin("stdlib-jdk8"))
 }
 
@@ -67,5 +67,5 @@ tasks {
     }
 }
 kotlin {
-    jvmToolchain(17)
+    jvmToolchain(8)
 }
