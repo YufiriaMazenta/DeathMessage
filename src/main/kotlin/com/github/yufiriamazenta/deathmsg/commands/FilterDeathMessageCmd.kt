@@ -3,7 +3,7 @@ package com.github.yufiriamazenta.deathmsg.commands
 import com.github.yufiriamazenta.deathmsg.DEATH_MESSAGE
 import com.github.yufiriamazenta.deathmsg.util.LangUtil
 import crypticlib.command.BukkitCommand
-import crypticlib.command.impl.RootCmdExecutor
+import crypticlib.command.RootCmdExecutor
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player

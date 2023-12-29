@@ -4,7 +4,7 @@ import com.github.yufiriamazenta.deathmsg.DEATH_MESSAGE
 import com.github.yufiriamazenta.deathmsg.data.DataManager.reloadData
 import crypticlib.chat.MessageSender
 import crypticlib.command.BukkitCommand
-import crypticlib.command.impl.RootCmdExecutor
+import crypticlib.command.RootCmdExecutor
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
