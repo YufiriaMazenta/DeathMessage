@@ -2,47 +2,44 @@ package com.github.yufiriamazenta.deathmsg.commands
 
 import com.github.yufiriamazenta.deathmsg.DEATH_MESSAGE
 import com.github.yufiriamazenta.deathmsg.util.LangUtil
-import crypticlib.command.BukkitCommand
-import crypticlib.command.RootCmdExecutor
-import org.bukkit.command.Command
+import crypticlib.command.CommandHandler
+import crypticlib.command.CommandInfo
+import crypticlib.command.annotation.Command
+import crypticlib.perm.PermInfo
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import org.bukkit.persistence.PersistentDataType
 
-@BukkitCommand(name = "deathmessagefilter", aliases = ["dmf"], permission = "deathmessage.command.filter")
-class FilterDeathMessageCmd : RootCmdExecutor() {
-    override fun onCommand(commandSender: CommandSender, command: Command, label: String, args: Array<String>): Boolean {
-        if (commandSender !is Player) {
-            LangUtil.sendLang(commandSender, "plugin_message.only_player")
+@Command
+object FilterDeathMessageCmd : CommandHandler(CommandInfo("deathmessagefilter", PermInfo("deathmessage.command.filter"), arrayOf("dmf"))) {
+
+    override fun execute(sender: CommandSender, args: MutableList<String>): Boolean {
+        if (sender !is Player) {
+            LangUtil.sendLang(sender, "plugin_message.only_player")
             return true
         }
         if (args.isEmpty()) {
-            toggleFilter(commandSender)
+            toggleFilter(sender)
         } else {
             when (args[0]) {
-                "on" -> setFilterOn(commandSender)
-                "off" -> setFilterOff(commandSender)
-                else -> toggleFilter(commandSender)
+                "on" -> setFilterOn(sender)
+                "off" -> setFilterOff(sender)
+                else -> toggleFilter(sender)
             }
         }
         return true
     }
 
-    override fun onTabComplete(
-        commandSender: CommandSender,
-        command: Command,
-        s: String,
-        strings: Array<String>
-    ): List<String> {
-        return when (strings.size) {
+    override fun tab(sender: CommandSender, args: MutableList<String>): MutableList<String> {
+        return when (args.size) {
             0, 1 -> {
                 val list: MutableList<String> = mutableListOf("off", "on")
-                list.removeIf { str: String -> !str.startsWith(strings[0]) }
+                list.removeIf { str: String -> !str.startsWith(args[0]) }
                 list
             }
 
             else -> {
-                listOf("")
+                mutableListOf("")
             }
         }
     }

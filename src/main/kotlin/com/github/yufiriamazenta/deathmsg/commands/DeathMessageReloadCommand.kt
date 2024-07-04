@@ -2,31 +2,27 @@ package com.github.yufiriamazenta.deathmsg.commands
 
 import com.github.yufiriamazenta.deathmsg.DEATH_MESSAGE
 import com.github.yufiriamazenta.deathmsg.data.DataManager.reloadData
-import crypticlib.chat.MessageSender
-import crypticlib.command.BukkitCommand
-import crypticlib.command.RootCmdExecutor
-import org.bukkit.command.Command
+import crypticlib.chat.MsgSender
+import crypticlib.command.CommandHandler
+import crypticlib.command.CommandInfo
+import crypticlib.command.annotation.Command
+import crypticlib.perm.PermInfo
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 
-@BukkitCommand(name = "deathmessagereload", permission = "deathmessage.command.reload", aliases = ["dmrl"])
-class DeathMessageReloadCommand : RootCmdExecutor() {
+@Command
+object DeathMessageReloadCommand : CommandHandler(CommandInfo("deathmessagereload", PermInfo("deathmessage.command.reload"), arrayOf("dmrl"))) {
 
-    override fun onCommand(
-        commandSender: CommandSender,
-        command: Command,
-        label: String,
-        args: Array<String>
-    ): Boolean {
+    override fun execute(sender: CommandSender, args: MutableList<String>): Boolean {
         if (args.isNotEmpty()) {
             return false
         }
-        if (commandSender is Player && !commandSender.isOp()) {
+        if (sender is Player && !sender.isOp()) {
             return false
         }
         reloadData()
-        val message: String = DEATH_MESSAGE.getConfig().getString("plugin_message.command_reload")?: "DeathMessage Reloaded"
-        MessageSender.sendMsg(commandSender, message)
+        val message: String = DEATH_MESSAGE.config.getString("plugin_message.command_reload")?: "DeathMessage Reloaded"
+        MsgSender.sendMsg(sender, message)
         return true
     }
 

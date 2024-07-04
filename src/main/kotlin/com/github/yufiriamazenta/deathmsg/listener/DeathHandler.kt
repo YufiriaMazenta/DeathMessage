@@ -2,10 +2,9 @@ package com.github.yufiriamazenta.deathmsg.listener
 
 import com.github.yufiriamazenta.deathmsg.DEATH_MESSAGE
 import com.github.yufiriamazenta.deathmsg.data.DataManager
-import crypticlib.chat.MessageSender
+import crypticlib.chat.MsgSender
 import crypticlib.chat.TextProcessor
 import crypticlib.listener.BukkitListener
-import crypticlib.nms.item.ItemFactory
 import me.clip.placeholderapi.PlaceholderAPI
 import net.md_5.bungee.api.ChatMessageType
 import net.md_5.bungee.api.chat.*
@@ -32,15 +31,11 @@ class DeathHandler: Listener {
 
     private var deathCauseKeyField: Field? = null
     private var combatTrackerField: Field? = null
-    private val entityHurtPlayerMap: MutableMap<UUID, UUID>
+    private val entityHurtPlayerMap: MutableMap<UUID, UUID> = ConcurrentHashMap()
     private var entityGetHandleMethod: Method? = null
     private var toChatMethod: Method? = null
     private var getComponentContentsMethod: Method? = null
     private var getObjsMethod: Method? = null
-
-    init {
-        entityHurtPlayerMap = ConcurrentHashMap()
-    }
 
     @EventHandler
     fun onPlayerDeathReplaceMessage(event: PlayerDeathEvent) {
@@ -61,7 +56,7 @@ class DeathHandler: Listener {
         deathCause = getNmsDeathCause(nmsDeathMsg)
         objArrLength = getMsgObjsLength(nmsDeathMsg)
         if (!DataManager.hasDeathCause(deathCause)) {
-            MessageSender.sendMsg(Bukkit.getConsoleSender(), "Death Cause $deathCause is Missing")
+            MsgSender.sendMsg(Bukkit.getConsoleSender(), "Death Cause $deathCause is Missing")
             DataManager.addDeathMessage(deathCause, mutableListOf(deathCause))
             return
         }
@@ -290,7 +285,7 @@ class DeathHandler: Listener {
         itemName = TextProcessor.color(itemName)
         val itemDisplayCompound: BaseComponent = TextComponent()
         itemDisplayCompound.extra = TextComponent.fromLegacyText(itemName).toMutableList()
-        itemDisplayCompound.hoverEvent = ItemFactory.item(handItem).toHover();
+//        itemDisplayCompound.hoverEvent = ItemFactory.item(handItem).toHover(); //TODO 寻找新的物品转HoverEvent方法
         return itemDisplayCompound
     }
 

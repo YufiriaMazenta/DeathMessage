@@ -2,7 +2,7 @@ package com.github.yufiriamazenta.deathmsg
 
 import com.github.yufiriamazenta.deathmsg.data.DataManager
 import crypticlib.BukkitPlugin
-import crypticlib.chat.MessageSender
+import crypticlib.chat.MsgSender
 import org.bukkit.Bukkit
 import org.bukkit.NamespacedKey
 import org.bukkit.entity.Player
@@ -15,11 +15,11 @@ class DeathMessage: BukkitPlugin() {
     override fun enable() {
         saveDefaultConfig()
         initDataContainer()
-        MessageSender.info("[DeathMessage] DeathMessage Enabled")
+        MsgSender.info("[DeathMessage] DeathMessage Enabled")
     }
 
     override fun disable() {
-        MessageSender.info("[DeathMessage] DeathMessage Disabled")
+        MsgSender.info("[DeathMessage] DeathMessage Disabled")
     }
 
     private fun initDataContainer() {
