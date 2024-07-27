@@ -6,8 +6,10 @@ import crypticlib.chat.MsgSender
 import crypticlib.chat.TextProcessor
 import crypticlib.listener.BukkitListener
 import me.clip.placeholderapi.PlaceholderAPI
+import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.ComponentLike
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
 import net.md_5.bungee.api.ChatMessageType
-import net.md_5.bungee.api.chat.*
 import net.minecraft.network.chat.ComponentContents
 import net.minecraft.network.chat.IChatBaseComponent
 import net.minecraft.network.chat.contents.TranslatableContents
@@ -36,6 +38,7 @@ class DeathHandler: Listener {
     private var toChatMethod: Method? = null
     private var getComponentContentsMethod: Method? = null
     private var getObjsMethod: Method? = null
+    private var legacySerializer = LegacyComponentSerializer.legacy('&')
 
     @EventHandler
     fun onPlayerDeathReplaceMessage(event: PlayerDeathEvent) {
@@ -68,7 +71,7 @@ class DeathHandler: Listener {
 
         //以下对死亡消息进行处理
         //此为消息中要替换的聊天组件
-        val objList: MutableList<BaseComponent> = ArrayList()
+        val objList: MutableList<ComponentLike> = ArrayList()
 
         //以下处理第一个对象的名字，一般是被杀的玩家
         val displayNameFormat: String = DEATH_MESSAGE.config.getString("player_name_format", "%player_displayname%")!!
@@ -76,7 +79,7 @@ class DeathHandler: Listener {
 
         //当对象数量大于2等于2时,意味着有击杀者
         if (objArrLength >= 2) {
-            objList.add(getKillerComponent(deadPlayer, displayNameFormat))
+            objList.add(getKillerComponent(deadPlayer))
         }
 
         //当有三个以上对象时,说明有使用的武器
@@ -85,7 +88,7 @@ class DeathHandler: Listener {
         }
 
         //组装成完整的死亡消息组件
-        val deathMsgComponent = TranslatableComponent(TextProcessor.color(message), *objList.toTypedArray())
+        val deathMsgComponent = Component.translatable(TextProcessor.color(message), *objList.toTypedArray())
 
         //当为all时直接让其为null,下面判断两种方式都发送
         val chatMessageTypeStr = DEATH_MESSAGE.config.getString("death_message_type", "chat")!!.uppercase()
@@ -104,14 +107,20 @@ class DeathHandler: Listener {
             if (deadPlayer != onlinePlayer) {
                 if (DEATH_MESSAGE.isPlayerDeathMsgFilterOn(onlinePlayer)) continue
             }
-            if (chatMessageType != null)
-                onlinePlayer.spigot().sendMessage(chatMessageType, deathMsgComponent)
-            else {
-                onlinePlayer.spigot().sendMessage(ChatMessageType.CHAT, deathMsgComponent)
-                onlinePlayer.spigot().sendMessage(ChatMessageType.ACTION_BAR, deathMsgComponent)
+            when (chatMessageType) {
+                ChatMessageType.CHAT, ChatMessageType.SYSTEM -> {
+                    onlinePlayer.sendMessage(deathMsgComponent)
+                }
+                ChatMessageType.ACTION_BAR -> {
+                    onlinePlayer.sendActionBar(deathMsgComponent)
+                }
+                null -> {
+                    onlinePlayer.sendMessage(deathMsgComponent)
+                    onlinePlayer.sendActionBar(deathMsgComponent)
+                }
             }
         }
-        Bukkit.getConsoleSender().spigot().sendMessage(deathMsgComponent)
+        Bukkit.getConsoleSender().sendMessage(deathMsgComponent)
         entityHurtPlayerMap.remove(deadPlayer.uniqueId)
         event.deathMessage = null
     }
@@ -202,91 +211,59 @@ class DeathHandler: Listener {
         }
     }
 
-    private fun getDeadPlayerComponent(deadPlayer: Player, displayNameFormat: String): BaseComponent {
+    private fun getDeadPlayerComponent(deadPlayer: Player, displayNameFormat: String): Component {
         var deadPlayerDisplayName =
             if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null)
                 TextProcessor.color(PlaceholderAPI.setPlaceholders(deadPlayer, displayNameFormat))
             else
                 deadPlayer.displayName
         deadPlayerDisplayName = TextProcessor.color(deadPlayerDisplayName)
-        val deadPlayerDisplayCompound: BaseComponent = TextComponent()
-        for (baseComponent in TextComponent.fromLegacyText(deadPlayerDisplayName)) {
-            deadPlayerDisplayCompound.addExtra(baseComponent)
-        }
-
-        return deadPlayerDisplayCompound
+        val deserialize = legacySerializer.deserialize(deadPlayerDisplayName)
+        deserialize.hoverEvent(deadPlayer.asHoverEvent())
+        return deserialize
     }
 
-    private fun getKillerComponent(deadPlayer: Player, displayNameFormat: String): BaseComponent {
-        return if (deadPlayer.killer != null) {
+    private fun getKillerComponent(deadPlayer: Player): Component {
+        val killer = deadPlayer.killer
+        return if (killer != null) {
             //当玩家存在击杀者时,返回击杀者的名字
-            var killerDisplayNameStr: String = if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) TextProcessor.color(
-                PlaceholderAPI.setPlaceholders(deadPlayer.killer, displayNameFormat)
-            ) else
-                deadPlayer.killer!!.displayName
-            killerDisplayNameStr = TextProcessor.color(killerDisplayNameStr)
-            val killerDisplayCompound: BaseComponent = TextComponent()
-            for (baseComponent in TextComponent.fromLegacyText(killerDisplayNameStr)) {
-                killerDisplayCompound.addExtra(baseComponent)
-            }
-            killerDisplayCompound
+            val displayName = killer.displayName()
+            displayName.hoverEvent(killer.asHoverEvent())
+            displayName
         } else {
             //当不存在击杀者时,尝试获取击杀实体的名字
             val lastEntityUuid = entityHurtPlayerMap[deadPlayer.uniqueId]
             if (lastEntityUuid == null || Bukkit.getEntity(lastEntityUuid) == null) {
                 //当不存在击杀实体时,说明玩家可能死于方块爆炸
                 val bedRespawnPoint = DataManager.getMessage(deadPlayer, "bad.respawn.point")?: "[刻意的游戏设计]"
-                val bedRespawnDisplayCompound: BaseComponent = TextComponent()
-                for (baseComponent in TextComponent.fromLegacyText(bedRespawnPoint)) {
-                    bedRespawnDisplayCompound.addExtra(baseComponent)
-                }
-                bedRespawnDisplayCompound
+                legacySerializer.deserialize(bedRespawnPoint)
             } else {
                 //当存在击杀实体时,尝试获取击杀实体
                 val lastEntity = Bukkit.getEntity(entityHurtPlayerMap[deadPlayer.uniqueId]!!)
-                if (lastEntity!!.customName != null) {
-                    val customNameDisplayCompound: BaseComponent = TextComponent()
-                    for (baseComponent in TextComponent.fromLegacyText(
-                        lastEntity.customName
-                    )) {
-                        customNameDisplayCompound.addExtra(baseComponent)
-                    }
-                    customNameDisplayCompound
+                if (lastEntity!!.customName() != null) {
+                    val customName = lastEntity.customName()!!
+                    customName.hoverEvent(lastEntity.asHoverEvent())
+                    customName
                 } else {
-                    val key = lastEntity.type.translationKey
-                    TranslatableComponent(key)
+                    val key = lastEntity.type.translationKey()
+                    val translatable = Component.translatable(key)
+                    translatable.hoverEvent(lastEntity.asHoverEvent())
+                    translatable
                 }
             }
         }
     }
 
-    private fun getKillItemComponent(deadPlayer: Player): BaseComponent {
-        var itemName: String
+    private fun getKillItemComponent(deadPlayer: Player): Component {
         val handItem: ItemStack = if (deadPlayer.killer != null) {
             deadPlayer.killer!!.inventory.itemInMainHand
         } else {
             val lastEntity = Bukkit.getEntity(entityHurtPlayerMap[deadPlayer.uniqueId]!!)
             (lastEntity as LivingEntity?)!!.equipment!!.itemInMainHand
         }
-        val meta = handItem.itemMeta
-        itemName = if (meta == null) handItem.type.name else {
-            if (meta.hasDisplayName()) {
-                meta.displayName
-            } else {
-                meta.localizedName
-            }
-        }
-        val itemNameFormat: String = if (handItem.enchantments.isEmpty()) {
-            DEATH_MESSAGE.config.getString("item_default_format", "&r[%item_name%&r]")!!
-        } else {
-            DEATH_MESSAGE.config.getString("item_enchanted_format", "&b[%item_name%&b]")!!
-        }
-        itemName = itemNameFormat.replace("%item_name%", itemName)
-        itemName = TextProcessor.color(itemName)
-        val itemDisplayCompound: BaseComponent = TextComponent()
-        itemDisplayCompound.extra = TextComponent.fromLegacyText(itemName).toMutableList()
-//        itemDisplayCompound.hoverEvent = ItemFactory.item(handItem).toHover(); //TODO 寻找新的物品转HoverEvent方法
-        return itemDisplayCompound
+        val displayName = handItem.displayName()
+        displayName.hoverEvent(handItem.asHoverEvent())
+        return displayName
     }
 
     @EventHandler
