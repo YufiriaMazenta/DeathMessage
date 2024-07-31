@@ -7,8 +7,8 @@ plugins {
     kotlin("jvm") version "1.9.20"
 }
 
-group = "com.github.yufiriamazenta"
-version = "1.3.2"
+group = "pers.yufiria"
+version = "1.4.0-beta1"
 
 repositories {
     mavenLocal()
@@ -32,7 +32,7 @@ dependencies {
     compileOnly("me.clip:placeholderapi:2.11.1")
     compileOnly("io.lumine:Mythic-Dist:5.3.5")
     compileOnly("io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT")
-    implementation("com.crypticlib:common:0.18.10")
+    implementation("com.crypticlib:bukkit:1.1.5")
     implementation(kotlin("stdlib-jdk8"))
 }
 
@@ -59,10 +59,10 @@ tasks {
     }
     shadowJar {
         archiveFileName.set("DeathMessage-$version.jar")
-        relocate("crypticlib", "com.github.yufiriamazenta.deathmsg.crypticlib")
-        relocate("kotlin", "com.github.yufiriamazenta.deathmsg.libs.kotlin")
-        relocate("org.intellij.lang.annotations", "com.github.yufiriamazenta.deathmsg.libs.intellij.lang.annotations")
-        relocate("org.jetbrains.annotations", "com.github.yufiriamazenta.deathmsg.libs.jetbrains.annotations")
+        relocate("crypticlib", "pers.yufiria.deathmsg.crypticlib")
+        relocate("kotlin", "pers.yufiria.deathmsg.libs.kotlin")
+        relocate("org.intellij.lang.annotations", "pers.yufiria.deathmsg.libs.intellij.lang.annotations")
+        relocate("org.jetbrains.annotations", "pers.yufiria.deathmsg.libs.jetbrains.annotations")
     }
 }
 kotlin {

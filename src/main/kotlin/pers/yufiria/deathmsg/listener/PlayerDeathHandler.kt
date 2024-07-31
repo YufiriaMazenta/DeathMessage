@@ -1,15 +1,12 @@
-package com.github.yufiriamazenta.deathmsg.listener
+package pers.yufiria.deathmsg.listener
 
-import com.github.yufiriamazenta.deathmsg.DEATH_MESSAGE
-import com.github.yufiriamazenta.deathmsg.data.DataManager
-import crypticlib.chat.MsgSender
-import crypticlib.chat.TextProcessor
-import crypticlib.listener.BukkitListener
+import crypticlib.chat.BukkitMsgSender
+import crypticlib.chat.BukkitTextProcessor
+import crypticlib.listener.EventListener
 import me.clip.placeholderapi.PlaceholderAPI
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.ComponentLike
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
-import net.md_5.bungee.api.ChatMessageType
 import net.minecraft.network.chat.ComponentContents
 import net.minecraft.network.chat.IChatBaseComponent
 import net.minecraft.network.chat.contents.TranslatableContents
@@ -22,14 +19,18 @@ import org.bukkit.event.Listener
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.inventory.ItemStack
+import pers.yufiria.deathmsg.config.DeathMessages
+import pers.yufiria.deathmsg.config.Configs
+import pers.yufiria.deathmsg.event.DeathMessageSendEvent
+import pers.yufiria.deathmsg.sync.DataSender
 import java.lang.reflect.Field
 import java.lang.reflect.InvocationTargetException
 import java.lang.reflect.Method
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
-@BukkitListener
-class DeathHandler: Listener {
+@EventListener
+object PlayerDeathHandler: Listener {
 
     private var deathCauseKeyField: Field? = null
     private var combatTrackerField: Field? = null
@@ -58,12 +59,12 @@ class DeathHandler: Listener {
         val nmsDeathMsg = getNmsDeathMsg(entityPlayer)
         deathCause = getNmsDeathCause(nmsDeathMsg)
         objArrLength = getMsgObjsLength(nmsDeathMsg)
-        if (!DataManager.hasDeathCause(deathCause)) {
-            MsgSender.sendMsg(Bukkit.getConsoleSender(), "Death Cause $deathCause is Missing")
-            DataManager.addDeathMessage(deathCause, mutableListOf(deathCause))
+        if (!DeathMessages.hasDeathCause(deathCause)) {
+            BukkitMsgSender.INSTANCE.sendMsg(Bukkit.getConsoleSender(), "Death Cause $deathCause is Missing")
+            DeathMessages.addDeathMessage(deathCause, mutableListOf(deathCause))
             return
         }
-        val message = DataManager.getMessage(deadPlayer, deathCause)
+        val message = DeathMessages.getMessage(deadPlayer, deathCause)
         if (message == null) {
             event.deathMessage = null
             return
@@ -74,8 +75,7 @@ class DeathHandler: Listener {
         val objList: MutableList<ComponentLike> = ArrayList()
 
         //以下处理第一个对象的名字，一般是被杀的玩家
-        val displayNameFormat: String = DEATH_MESSAGE.config.getString("player_name_format", "%player_displayname%")!!
-        objList.add(getDeadPlayerComponent(deadPlayer, displayNameFormat))
+        objList.add(getDeadPlayerComponent(deadPlayer))
 
         //当对象数量大于2等于2时,意味着有击杀者
         if (objArrLength >= 2) {
@@ -88,41 +88,13 @@ class DeathHandler: Listener {
         }
 
         //组装成完整的死亡消息组件
-        val deathMsgComponent = Component.translatable(TextProcessor.color(message), *objList.toTypedArray())
-
-        //当为all时直接让其为null,下面判断两种方式都发送
-        val chatMessageTypeStr = DEATH_MESSAGE.config.getString("death_message_type", "chat")!!.uppercase()
-        val chatMessageType = if (chatMessageTypeStr != "ALL") {
-            try {
-                ChatMessageType.valueOf(chatMessageTypeStr)
-            } catch (e: Exception) {
-                ChatMessageType.CHAT
-            }
-        } else {
-            null
-        }
-
-        //发送死亡消息给没有屏蔽死亡消息的玩家
-        for (onlinePlayer in Bukkit.getOnlinePlayers()) {
-            if (deadPlayer != onlinePlayer) {
-                if (DEATH_MESSAGE.isPlayerDeathMsgFilterOn(onlinePlayer)) continue
-            }
-            when (chatMessageType) {
-                ChatMessageType.CHAT, ChatMessageType.SYSTEM -> {
-                    onlinePlayer.sendMessage(deathMsgComponent)
-                }
-                ChatMessageType.ACTION_BAR -> {
-                    onlinePlayer.sendActionBar(deathMsgComponent)
-                }
-                null -> {
-                    onlinePlayer.sendMessage(deathMsgComponent)
-                    onlinePlayer.sendActionBar(deathMsgComponent)
-                }
-            }
-        }
-        Bukkit.getConsoleSender().sendMessage(deathMsgComponent)
+        val deathMsgComponent = Component.translatable(BukkitTextProcessor.color(message), *objList.toTypedArray())
         entityHurtPlayerMap.remove(deadPlayer.uniqueId)
-        event.deathMessage = null
+        val sendEvent = DeathMessageSendEvent(deathMsgComponent, deadPlayer)
+        if (sendEvent.callEvent()) {
+            DataSender.sendDeathMessage(sendEvent.deathMessage())
+            event.deathMessage = null
+        }
     }
 
     private fun getNmsDeathMsg(entityPlayer: EntityPlayer): TranslatableContents? {
@@ -211,13 +183,13 @@ class DeathHandler: Listener {
         }
     }
 
-    private fun getDeadPlayerComponent(deadPlayer: Player, displayNameFormat: String): Component {
+    private fun getDeadPlayerComponent(deadPlayer: Player): Component {
         var deadPlayerDisplayName =
             if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null)
-                TextProcessor.color(PlaceholderAPI.setPlaceholders(deadPlayer, displayNameFormat))
+                BukkitTextProcessor.color(PlaceholderAPI.setPlaceholders(deadPlayer, Configs.playerNameFormat.value()))
             else
                 deadPlayer.displayName
-        deadPlayerDisplayName = TextProcessor.color(deadPlayerDisplayName)
+        deadPlayerDisplayName = BukkitTextProcessor.color(deadPlayerDisplayName)
         val deserialize = legacySerializer.deserialize(deadPlayerDisplayName)
         deserialize.hoverEvent(deadPlayer.asHoverEvent())
         return deserialize
@@ -235,7 +207,7 @@ class DeathHandler: Listener {
             val lastEntityUuid = entityHurtPlayerMap[deadPlayer.uniqueId]
             if (lastEntityUuid == null || Bukkit.getEntity(lastEntityUuid) == null) {
                 //当不存在击杀实体时,说明玩家可能死于方块爆炸
-                val bedRespawnPoint = DataManager.getMessage(deadPlayer, "bad.respawn.point")?: "[刻意的游戏设计]"
+                val bedRespawnPoint = DeathMessages.getMessage(deadPlayer, "bad.respawn.point")?: "[刻意的游戏设计]"
                 legacySerializer.deserialize(bedRespawnPoint)
             } else {
                 //当存在击杀实体时,尝试获取击杀实体

@@ -1,8 +1,7 @@
 player_name_format: "%player_displayname%"
-item_default_format: "&r[%item_name%&r]"
-item_enchanted_format: "&b[%item_name%&b]"
 #死亡消息展示的地方，支持chat（聊天栏）和action_bar（物品栏上方）和all（同时chat和action_bar），默认为chat
 death_message_type: chat
+proxy: false
 death_message:
   death_attack_anvil:
     - "%1$s被铁砧砸中了"
@@ -203,7 +202,6 @@ death_message:
   death_fell_killer:
     - "%1$s注定要摔死"
 plugin_message:
-  prefix: "&8[&4Death&7Message&8] "
   command_reload: "&a插件重载完毕"
   only_player: "&c只有玩家才能使用此命令"
   filter_on: "&a已开启死亡消息屏蔽"

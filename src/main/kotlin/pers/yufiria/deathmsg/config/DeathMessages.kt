@@ -1,40 +1,27 @@
-package com.github.yufiriamazenta.deathmsg.data
+package pers.yufiria.deathmsg.config
 
-import com.github.yufiriamazenta.deathmsg.DEATH_MESSAGE
-import crypticlib.util.YamlConfigUtil
-import org.bukkit.configuration.file.FileConfiguration
+import crypticlib.lifecycle.BukkitEnabler
+import crypticlib.lifecycle.BukkitReloader
+import crypticlib.lifecycle.annotation.OnEnable
+import crypticlib.lifecycle.annotation.OnReload
+import crypticlib.util.YamlConfigHelper
 import org.bukkit.entity.Player
+import org.bukkit.plugin.Plugin
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
-object DataManager {
+@OnEnable
+@OnReload
+object DeathMessages: BukkitReloader, BukkitEnabler {
 
-    private val deathMsgMap: MutableMap<String, List<*>>
-    private var random: Random
-
-    init {
-        deathMsgMap = ConcurrentHashMap()
-        random = Random()
-    }
-
-    fun reloadData() {
-        deathMsgMap.clear()
-        DEATH_MESSAGE.reloadConfig()
-        val config: FileConfiguration = DEATH_MESSAGE.config
-        for (key in config.getConfigurationSection("death_message")!!.getKeys(false)) {
-            deathMsgMap[key.replace("_", ".")] = YamlConfigUtil.configList2List(
-                config.getList(
-                    "death_message.$key", ArrayList<Any>()
-                )
-            )
-        }
-    }
+    private val deathMsgMap: MutableMap<String, List<*>> = ConcurrentHashMap()
+    private var random: Random = Random()
 
     fun addDeathMessage(deathCause: String, deathMessages: MutableList<String>) {
         val saveKey: String = deathCause.replace(".", "_")
         deathMsgMap[deathCause] = deathMessages
-        DEATH_MESSAGE.config.set("death_message.$saveKey", deathMessages)
-        DEATH_MESSAGE.saveConfig()
+        Configs.deathMessages.value().set(saveKey, deathMessages)
+        Configs.deathMessages.configContainer().configWrapper().saveConfig()
     }
 
     fun hasDeathCause(deathCause: String): Boolean {
@@ -61,4 +48,21 @@ object DataManager {
         }
         return null
     }
+
+    override fun reload(plugin: Plugin) {
+        deathMsgMap.clear()
+        val deathMessagesConfig = Configs.deathMessages.value()
+        for (key in deathMessagesConfig.getKeys(false)) {
+            deathMsgMap[key.replace("_", ".")] = YamlConfigHelper.configList2List(
+                deathMessagesConfig.getList(
+                    key, ArrayList<Any>()
+                )
+            )
+        }
+    }
+
+    override fun enable(plugin: Plugin) {
+        reload(plugin)
+    }
+
 }
