@@ -3,9 +3,9 @@ package pers.yufiria.deathmsg.listener
 import crypticlib.chat.BukkitMsgSender
 import crypticlib.chat.BukkitTextProcessor
 import crypticlib.listener.EventListener
-import me.clip.placeholderapi.PlaceholderAPI
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.ComponentLike
+import net.kyori.adventure.text.TextReplacementConfig
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
 import net.minecraft.network.chat.ComponentContents
 import net.minecraft.network.chat.IChatBaseComponent
@@ -39,7 +39,7 @@ object PlayerDeathHandler: Listener {
     private var toChatMethod: Method? = null
     private var getComponentContentsMethod: Method? = null
     private var getObjsMethod: Method? = null
-    private var legacySerializer = LegacyComponentSerializer.legacy('&')
+    private var legacySerializer = LegacyComponentSerializer.builder().hexColors().hexCharacter('#').character('&').build()
 
     @EventHandler
     fun onPlayerDeathReplaceMessage(event: PlayerDeathEvent) {
@@ -64,7 +64,7 @@ object PlayerDeathHandler: Listener {
             DeathMessages.addDeathMessage(deathCause, mutableListOf(deathCause))
             return
         }
-        val message = DeathMessages.getMessage(deadPlayer, deathCause)
+        var message = DeathMessages.getMessage(deadPlayer, deathCause)
         if (message == null) {
             event.deathMessage = null
             return
@@ -88,7 +88,15 @@ object PlayerDeathHandler: Listener {
         }
 
         //组装成完整的死亡消息组件
-        val deathMsgComponent = Component.translatable(BukkitTextProcessor.color(message), *objList.toTypedArray())
+        message = BukkitTextProcessor.placeholder(deadPlayer, message);
+        var deathMsgComponent: Component = legacySerializer.deserialize(message)
+        deathMsgComponent = deathMsgComponent.replaceText(TextReplacementConfig.builder().matchLiteral("%dead_player%").replacement(objList[0]).build())
+        if (objList.size >= 2) {
+            deathMsgComponent = deathMsgComponent.replaceText(TextReplacementConfig.builder().matchLiteral("%killer%").replacement(objList[1]).build())
+        }
+        if (objList.size >= 3) {
+            deathMsgComponent = deathMsgComponent.replaceText(TextReplacementConfig.builder().matchLiteral("%kill_item%").replacement(objList[2]).build())
+        }
         entityHurtPlayerMap.remove(deadPlayer.uniqueId)
         val sendEvent = DeathMessageSendEvent(deathMsgComponent, deadPlayer)
         if (sendEvent.callEvent()) {
@@ -184,15 +192,13 @@ object PlayerDeathHandler: Listener {
     }
 
     private fun getDeadPlayerComponent(deadPlayer: Player): Component {
-        var deadPlayerDisplayName =
+        val deadPlayerComponent: Component =
             if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null)
-                BukkitTextProcessor.color(PlaceholderAPI.setPlaceholders(deadPlayer, Configs.playerNameFormat.value()))
+                legacySerializer.deserialize(BukkitTextProcessor.placeholder(deadPlayer, Configs.playerNameFormat.value()))
             else
-                deadPlayer.displayName
-        deadPlayerDisplayName = BukkitTextProcessor.color(deadPlayerDisplayName)
-        val deserialize = legacySerializer.deserialize(deadPlayerDisplayName)
-        deserialize.hoverEvent(deadPlayer.asHoverEvent())
-        return deserialize
+                deadPlayer.displayName()
+        deadPlayerComponent.hoverEvent(deadPlayer.asHoverEvent())
+        return deadPlayerComponent
     }
 
     private fun getKillerComponent(deadPlayer: Player): Component {
