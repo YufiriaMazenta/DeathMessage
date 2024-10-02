@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "pers.yufiria"
-version = "1.4.0-beta2"
+version = "1.4.0"
 
 repositories {
     mavenLocal()

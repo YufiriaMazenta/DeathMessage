@@ -2,14 +2,11 @@ package pers.yufiria.deathmsg.commands
 
 import crypticlib.chat.BukkitMsgSender
 import crypticlib.command.BukkitCommand
-import pers.yufiria.deathmsg.DEATH_MESSAGE
-import crypticlib.command.CommandHandler
 import crypticlib.command.CommandInfo
 import crypticlib.command.annotation.Command
 import crypticlib.perm.PermInfo
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
-import org.bukkit.persistence.PersistentDataType
 import pers.yufiria.deathmsg.config.Configs
 import pers.yufiria.deathmsg.util.PlayerUtil
 
