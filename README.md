@@ -1,5 +1,5 @@
 <div align="center">
-<h1>LiteDeathMessage</h1>
+<h1>DeathMessage</h1>
 <h6>自定义玩家死亡消息</h6>
 </div>
 
