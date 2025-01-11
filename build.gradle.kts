@@ -29,7 +29,7 @@ repositories {
 dependencies {
     compileOnly("org.spigotmc:spigot:1.19-R0.1-SNAPSHOT")
     compileOnly("net.luckperms:api:5.4")
-    compileOnly("me.clip:placeholderapi:2.11.1")
+    compileOnly("me.clip:placeholderapi:2.11.6")
     compileOnly("io.lumine:Mythic-Dist:5.3.5")
     compileOnly("io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT")
     implementation("com.crypticlib:bukkit:1.1.5")
@@ -60,7 +60,7 @@ tasks {
     shadowJar {
         archiveFileName.set("DeathMessage-$version.jar")
         relocate("crypticlib", "pers.yufiria.deathmsg.crypticlib")
-        relocate("kotlin", "pers.yufiria.deathmsg.libs.kotlin")
+        relocate("kotlin", "kotlin1920")
         relocate("org.intellij.lang.annotations", "pers.yufiria.deathmsg.libs.intellij.lang.annotations")
         relocate("org.jetbrains.annotations", "pers.yufiria.deathmsg.libs.jetbrains.annotations")
     }
