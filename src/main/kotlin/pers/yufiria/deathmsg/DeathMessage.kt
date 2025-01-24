@@ -1,12 +1,8 @@
 package pers.yufiria.deathmsg
 
-import pers.yufiria.deathmsg.config.DeathMessages
 import crypticlib.BukkitPlugin
 import crypticlib.chat.BukkitMsgSender
 import org.bukkit.Bukkit
-import org.bukkit.NamespacedKey
-import org.bukkit.entity.Player
-import org.bukkit.persistence.PersistentDataType
 
 class DeathMessage: BukkitPlugin() {
 

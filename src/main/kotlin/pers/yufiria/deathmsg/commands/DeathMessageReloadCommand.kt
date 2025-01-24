@@ -11,7 +11,13 @@ import pers.yufiria.deathmsg.DEATH_MESSAGE
 import pers.yufiria.deathmsg.config.Configs
 
 @Command
-object DeathMessageReloadCommand : BukkitCommand(CommandInfo("deathmessagereload", PermInfo("deathmessage.command.reload"), mutableListOf("dmrl"))) {
+object DeathMessageReloadCommand : BukkitCommand(
+    CommandInfo(
+        "deathmessagereload",
+        PermInfo("deathmessage.command.reload"),
+        mutableListOf("dmrl")
+    )
+) {
 
     override fun execute(sender: CommandSender, args: MutableList<String>) {
         if (args.isNotEmpty()) {

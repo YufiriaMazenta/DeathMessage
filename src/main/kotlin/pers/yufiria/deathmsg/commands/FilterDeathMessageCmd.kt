@@ -11,7 +11,12 @@ import pers.yufiria.deathmsg.config.Configs
 import pers.yufiria.deathmsg.util.PlayerUtil
 
 @Command
-object FilterDeathMessageCmd : BukkitCommand(CommandInfo("deathmessagefilter", PermInfo("deathmessage.command.filter"), mutableListOf("dmf"))) {
+object FilterDeathMessageCmd : BukkitCommand(
+    CommandInfo(
+        "deathmessagefilter",
+        PermInfo("deathmessage.command.filter"), mutableListOf("dmf")
+    )
+) {
 
     override fun execute(sender: CommandSender, args: MutableList<String>) {
         if (sender !is Player) {

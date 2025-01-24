@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "pers.yufiria"
-version = "1.4.0"
+version = "1.4.1"
 
 repositories {
     mavenLocal()
@@ -32,7 +32,7 @@ dependencies {
     compileOnly("me.clip:placeholderapi:2.11.6")
     compileOnly("io.lumine:Mythic-Dist:5.3.5")
     compileOnly("io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT")
-    implementation("com.crypticlib:bukkit:1.1.5")
+    implementation("com.crypticlib:bukkit:1.10.7")
     implementation(kotlin("stdlib-jdk8"))
 }
 

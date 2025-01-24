@@ -1,8 +1,10 @@
 package pers.yufiria.deathmsg.util
 
 import crypticlib.chat.BukkitMsgSender
-import crypticlib.lifecycle.BukkitEnabler
-import crypticlib.lifecycle.annotation.OnEnable
+import crypticlib.lifecycle.AutoTask
+import crypticlib.lifecycle.BukkitLifeCycleTask
+import crypticlib.lifecycle.LifeCycle
+import crypticlib.lifecycle.TaskRule
 import org.bukkit.NamespacedKey
 import org.bukkit.entity.Player
 import org.bukkit.persistence.PersistentDataType
@@ -10,8 +12,8 @@ import org.bukkit.plugin.Plugin
 import pers.yufiria.deathmsg.DEATH_MESSAGE
 import pers.yufiria.deathmsg.config.Configs
 
-@OnEnable
-object PlayerUtil: BukkitEnabler {
+@AutoTask(rules = [TaskRule(lifeCycle = LifeCycle.ENABLE)])
+object PlayerUtil: BukkitLifeCycleTask {
 
     private lateinit var deathMessageFilterKey: NamespacedKey
 
@@ -43,8 +45,7 @@ object PlayerUtil: BukkitEnabler {
         return filterFlag != null && filterFlag.toInt() != 0
     }
 
-
-    override fun enable(plugin: Plugin) {
+    override fun run(p0: Plugin?, p1: LifeCycle?) {
         deathMessageFilterKey = NamespacedKey(DEATH_MESSAGE, "death_msg_filter")
     }
 

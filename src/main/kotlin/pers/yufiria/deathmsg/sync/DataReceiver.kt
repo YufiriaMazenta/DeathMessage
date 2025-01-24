@@ -1,8 +1,10 @@
 package pers.yufiria.deathmsg.sync
 
 import com.google.common.io.ByteStreams
-import crypticlib.lifecycle.BukkitEnabler
-import crypticlib.lifecycle.annotation.OnEnable
+import crypticlib.lifecycle.AutoTask
+import crypticlib.lifecycle.BukkitLifeCycleTask
+import crypticlib.lifecycle.LifeCycle
+import crypticlib.lifecycle.TaskRule
 import org.bukkit.entity.Player
 import org.bukkit.plugin.Plugin
 import org.bukkit.plugin.messaging.PluginMessageListener
@@ -13,8 +15,8 @@ import java.io.ByteArrayInputStream
 import java.io.DataInputStream
 import java.io.IOException
 
-@OnEnable
-object DataReceiver: PluginMessageListener, BukkitEnabler {
+@AutoTask(rules = [TaskRule(lifeCycle = LifeCycle.ENABLE)])
+object DataReceiver: PluginMessageListener, BukkitLifeCycleTask {
 
     override fun onPluginMessageReceived(channel: String, player: Player, messages: ByteArray) {
         if (!Configs.proxy.value()) return
@@ -44,7 +46,7 @@ object DataReceiver: PluginMessageListener, BukkitEnabler {
 
     }
 
-    override fun enable(plugin: Plugin) {
+    override fun run(plugin: Plugin, p1: LifeCycle) {
         if (Configs.proxy.value()) {
             plugin.server.messenger.registerOutgoingPluginChannel(plugin, "BungeeCord")
             plugin.server.messenger.registerIncomingPluginChannel(plugin, "BungeeCord", this)

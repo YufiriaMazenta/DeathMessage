@@ -1,24 +1,25 @@
 package pers.yufiria.deathmsg.config
 
-import crypticlib.lifecycle.BukkitEnabler
-import crypticlib.lifecycle.BukkitReloader
-import crypticlib.lifecycle.annotation.OnEnable
-import crypticlib.lifecycle.annotation.OnReload
+import crypticlib.lifecycle.*
 import crypticlib.util.YamlConfigHelper
 import org.bukkit.entity.Player
 import org.bukkit.plugin.Plugin
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
-@OnEnable
-@OnReload
-object DeathMessages: BukkitReloader, BukkitEnabler {
+@AutoTask(
+    rules = [
+        TaskRule(lifeCycle = LifeCycle.ENABLE),
+        TaskRule(lifeCycle = LifeCycle.RELOAD)
+    ]
+)
+object DeathMessages: BukkitLifeCycleTask {
 
     private val deathMsgMap: MutableMap<String, List<*>> = ConcurrentHashMap()
     private var random: Random = Random()
 
     fun addDeathMessage(deathCause: String, deathMessages: MutableList<String>) {
-        val saveKey: String = deathCause.replace(".", "_")
+        val saveKey: String = deathCause.replace(".", "-")
         deathMsgMap[deathCause] = deathMessages
         Configs.deathMessages.value().set(saveKey, deathMessages)
         Configs.deathMessages.configContainer().configWrapper().saveConfig()
@@ -49,20 +50,16 @@ object DeathMessages: BukkitReloader, BukkitEnabler {
         return null
     }
 
-    override fun reload(plugin: Plugin) {
+    override fun run(plugin: Plugin?, lifeCycle: LifeCycle?) {
         deathMsgMap.clear()
         val deathMessagesConfig = Configs.deathMessages.value()
         for (key in deathMessagesConfig.getKeys(false)) {
-            deathMsgMap[key.replace("_", ".")] = YamlConfigHelper.configList2List(
+            deathMsgMap[key.replace("-", ".")] = YamlConfigHelper.configList2List(
                 deathMessagesConfig.getList(
                     key, ArrayList<Any>()
                 )
             )
         }
-    }
-
-    override fun enable(plugin: Plugin) {
-        reload(plugin)
     }
 
 }
