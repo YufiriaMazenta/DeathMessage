@@ -20,9 +20,7 @@ repositories {
     maven("https://repo.purpurmc.org/snapshots")
     maven("https://mvn.lumine.io/repository/maven-public/")
     maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
-    maven("http://repo.crypticlib.com:8081/repository/maven-public/") {
-        isAllowInsecureProtocol = true
-    }
+    maven("https://repo.crypticlib.com:8081/repository/maven-public/")
     mavenCentral()
 }
 
