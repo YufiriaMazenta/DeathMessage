@@ -16,5 +16,7 @@ object Configs {
     @JvmStatic val pluginMessagePlayerOnly = StringConfig("plugin_message.player_only", "&c只有玩家才能使用此命令")
     @JvmStatic val pluginMessageFilterOn = StringConfig("plugin_message.filter_on", "&a已开启死亡消息屏蔽")
     @JvmStatic val pluginMessageFilterOff = StringConfig("plugin_message.filter_off", "&a已关闭死亡消息屏蔽")
+    @JvmStatic val placeholderDeathMessageFilterOn = StringConfig("placeholder.death_message_filter.on", "&a已开启")
+    @JvmStatic val placeholderDeathMessageFilterOff = StringConfig("placeholder.death_message_filter.off", "&c已关闭")
 
 }

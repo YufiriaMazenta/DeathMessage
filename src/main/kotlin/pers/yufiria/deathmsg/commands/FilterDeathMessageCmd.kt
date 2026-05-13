@@ -1,41 +1,43 @@
 package pers.yufiria.deathmsg.commands
 
-import crypticlib.chat.BukkitMsgSender
-import crypticlib.command.BukkitCommand
 import crypticlib.command.CommandInfo
+import crypticlib.command.CommandInvoker
+import crypticlib.command.CommandTree
 import crypticlib.command.annotation.Command
 import crypticlib.perm.PermInfo
-import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import pers.yufiria.deathmsg.config.Configs
-import pers.yufiria.deathmsg.util.PlayerUtil
+import pers.yufiria.deathmsg.util.PlayerUtil.setFilterOff
+import pers.yufiria.deathmsg.util.PlayerUtil.setFilterOn
+import pers.yufiria.deathmsg.util.PlayerUtil.toggleFilter
 
 @Command
-object FilterDeathMessageCmd : BukkitCommand(
+object FilterDeathMessageCmd : CommandTree(
     CommandInfo(
         "deathmessagefilter",
         PermInfo("deathmessage.command.filter"), mutableListOf("dmf")
     )
 ) {
 
-    override fun execute(sender: CommandSender, args: MutableList<String>) {
-        if (sender !is Player) {
-            BukkitMsgSender.INSTANCE.sendMsg(sender, Configs.pluginMessagePlayerOnly.value())
+    override fun execute(invoker: CommandInvoker, args: MutableList<String>) {
+        if (invoker.isConsole) {
+            invoker.sendMsg(Configs.pluginMessagePlayerOnly.value())
             return
         }
+        val player = invoker.asPlayer().platformPlayer as Player
         if (args.isEmpty()) {
-            PlayerUtil.toggleFilter(sender)
+            player.toggleFilter()
         } else {
             when (args[0]) {
-                "on" -> PlayerUtil.setFilterOn(sender)
-                "off" -> PlayerUtil.setFilterOff(sender)
-                else -> PlayerUtil.toggleFilter(sender)
+                "on" -> player.setFilterOn()
+                "off" -> player.setFilterOff()
+                else -> player.toggleFilter()
             }
         }
         return
     }
 
-    override fun tab(sender: CommandSender, args: MutableList<String>): MutableList<String> {
+    override fun tab(invoker: CommandInvoker, args: MutableList<String>): MutableList<String> {
         return when (args.size) {
             0, 1 -> {
                 val list: MutableList<String> = mutableListOf("off", "on")

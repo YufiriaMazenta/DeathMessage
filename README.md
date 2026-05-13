@@ -37,4 +37,8 @@ Paper服务端自定义玩家死亡消息插件, 支持颜色代码, 可跨服.
 
 无权限节点
 
+### PlaceholderAPI变量
+
+`%deathmessage_fitler_state%`显示玩家当前是否开启死亡消息过滤功能
+
 

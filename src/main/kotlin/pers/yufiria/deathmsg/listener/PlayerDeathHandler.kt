@@ -19,7 +19,7 @@ import org.bukkit.event.Listener
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.inventory.ItemStack
-import pers.yufiria.deathmsg.config.DeathMessages
+import pers.yufiria.deathmsg.config.DeathMessagesConfig
 import pers.yufiria.deathmsg.config.Configs
 import pers.yufiria.deathmsg.event.DeathMessageSendEvent
 import pers.yufiria.deathmsg.sync.DataSender
@@ -59,12 +59,12 @@ object PlayerDeathHandler: Listener {
         val nmsDeathMsg = getNmsDeathMsg(entityPlayer)
         deathCause = getNmsDeathCause(nmsDeathMsg)
         objArrLength = getMsgObjsLength(nmsDeathMsg)
-        if (!DeathMessages.hasDeathCause(deathCause)) {
+        if (!DeathMessagesConfig.hasDeathCause(deathCause)) {
             BukkitMsgSender.INSTANCE.sendMsg(Bukkit.getConsoleSender(), "Death Cause $deathCause is Missing")
-            DeathMessages.addDeathMessage(deathCause, mutableListOf(deathCause))
+            DeathMessagesConfig.addDeathMessage(deathCause, mutableListOf(deathCause))
             return
         }
-        var message = DeathMessages.getMessage(deadPlayer, deathCause)
+        var message = DeathMessagesConfig.getMessage(deadPlayer, deathCause)
         if (message == null) {
             event.deathMessage = null
             return
@@ -213,7 +213,7 @@ object PlayerDeathHandler: Listener {
             val lastEntityUuid = entityHurtPlayerMap[deadPlayer.uniqueId]
             if (lastEntityUuid == null || Bukkit.getEntity(lastEntityUuid) == null) {
                 //当不存在击杀实体时,说明玩家可能死于方块爆炸
-                val bedRespawnPoint = DeathMessages.getMessage(deadPlayer, "bad.respawn.point")?: "[刻意的游戏设计]"
+                val bedRespawnPoint = DeathMessagesConfig.getMessage(deadPlayer, "bad.respawn.point")?: "[刻意的游戏设计]"
                 legacySerializer.deserialize(bedRespawnPoint)
             } else {
                 //当存在击杀实体时,尝试获取击杀实体

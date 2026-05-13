@@ -9,6 +9,7 @@ import org.bukkit.event.Listener
 import pers.yufiria.deathmsg.config.Configs
 import pers.yufiria.deathmsg.event.DeathMessageSendEvent
 import pers.yufiria.deathmsg.util.PlayerUtil
+import pers.yufiria.deathmsg.util.PlayerUtil.isPlayerDeathMsgFilterOn
 
 @EventListener
 object DeathMsgHandler: Listener {
@@ -32,7 +33,7 @@ object DeathMsgHandler: Listener {
         //发送死亡消息给没有屏蔽死亡消息的玩家
         for (onlinePlayer in Bukkit.getOnlinePlayers()) {
             if (deadPlayer != onlinePlayer) {
-                if (PlayerUtil.isPlayerDeathMsgFilterOn(onlinePlayer)) continue
+                if (onlinePlayer.isPlayerDeathMsgFilterOn()) continue
             }
             when (chatMessageType) {
                 ChatMessageType.CHAT, ChatMessageType.SYSTEM -> {

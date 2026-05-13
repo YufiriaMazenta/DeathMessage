@@ -7,13 +7,13 @@ import org.bukkit.plugin.Plugin
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
-@AutoTask(
+@LifeCycleTaskSettings(
     rules = [
         TaskRule(lifeCycle = LifeCycle.ENABLE),
         TaskRule(lifeCycle = LifeCycle.RELOAD)
     ]
 )
-object DeathMessages: BukkitLifeCycleTask {
+object DeathMessagesConfig: BukkitLifeCycleTask {
 
     private val deathMsgMap: MutableMap<String, List<*>> = ConcurrentHashMap()
     private var random: Random = Random()
@@ -50,7 +50,7 @@ object DeathMessages: BukkitLifeCycleTask {
         return null
     }
 
-    override fun run(plugin: Plugin?, lifeCycle: LifeCycle?) {
+    override fun lifecycle(plugin: Plugin?, lifeCycle: LifeCycle?) {
         deathMsgMap.clear()
         val deathMessagesConfig = Configs.deathMessages.value()
         for (key in deathMessagesConfig.getKeys(false)) {

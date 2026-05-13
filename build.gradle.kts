@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "pers.yufiria"
-version = "1.4.1"
+version = "1.4.2"
 
 repositories {
     mavenLocal()
@@ -20,7 +20,10 @@ repositories {
     maven("https://repo.purpurmc.org/snapshots")
     maven("https://mvn.lumine.io/repository/maven-public/")
     maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
-    maven("https://repo.crypticlib.com:8081/repository/maven-public/")
+    //CrypticLib
+    maven("http://110.42.10.241:8082/repository/maven-public/") {
+        isAllowInsecureProtocol = true
+    }
     mavenCentral()
 }
 
@@ -30,7 +33,7 @@ dependencies {
     compileOnly("me.clip:placeholderapi:2.11.6")
     compileOnly("io.lumine:Mythic-Dist:5.3.5")
     compileOnly("io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT")
-    implementation("com.crypticlib:bukkit:1.10.7")
+    implementation("com.crypticlib:bukkit:1.13.15.2")
     implementation(kotlin("stdlib-jdk8"))
 }
 
