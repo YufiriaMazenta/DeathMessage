@@ -13,7 +13,7 @@ import java.util.concurrent.ConcurrentHashMap
         TaskRule(lifeCycle = LifeCycle.RELOAD)
     ]
 )
-object DeathMessagesConfig: BukkitLifeCycleTask {
+object DeathMessagesConfig: LifeCycleTask {
 
     private val deathMsgMap: MutableMap<String, List<*>> = ConcurrentHashMap()
     private var random: Random = Random()
@@ -50,7 +50,7 @@ object DeathMessagesConfig: BukkitLifeCycleTask {
         return null
     }
 
-    override fun lifecycle(plugin: Plugin?, lifeCycle: LifeCycle?) {
+    override fun lifecycle(plugin: Any, lifeCycle: LifeCycle?) {
         deathMsgMap.clear()
         val deathMessagesConfig = Configs.deathMessages.value()
         for (key in deathMessagesConfig.getKeys(false)) {

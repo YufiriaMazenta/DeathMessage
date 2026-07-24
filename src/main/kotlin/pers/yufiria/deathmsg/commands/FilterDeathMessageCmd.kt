@@ -1,15 +1,17 @@
 package pers.yufiria.deathmsg.commands
 
 import crypticlib.command.CommandInfo
-import crypticlib.command.CommandInvoker
+import crypticlib.Invoker
 import crypticlib.command.CommandTree
 import crypticlib.command.annotation.Command
 import crypticlib.perm.PermInfo
+import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import pers.yufiria.deathmsg.config.Configs
 import pers.yufiria.deathmsg.util.PlayerUtil.setFilterOff
 import pers.yufiria.deathmsg.util.PlayerUtil.setFilterOn
 import pers.yufiria.deathmsg.util.PlayerUtil.toggleFilter
+import java.util.Optional
 
 @Command
 object FilterDeathMessageCmd : CommandTree(
@@ -19,12 +21,16 @@ object FilterDeathMessageCmd : CommandTree(
     )
 ) {
 
-    override fun execute(invoker: CommandInvoker, args: MutableList<String>) {
+    override fun execute(invoker: Invoker, args: MutableList<String>) {
         if (invoker.isConsole) {
             invoker.sendMsg(Configs.pluginMessagePlayerOnly.value())
             return
         }
-        val player = invoker.asPlayer().platformPlayer as Player
+        val platformPlayerOpt: Optional<Player> = invoker.asPlayer().getPlatformPlayer(Bukkit::getPlayer)
+        if (platformPlayerOpt.isEmpty) {
+            return
+        }
+        val player = platformPlayerOpt.get()
         if (args.isEmpty()) {
             player.toggleFilter()
         } else {
@@ -37,7 +43,7 @@ object FilterDeathMessageCmd : CommandTree(
         return
     }
 
-    override fun tab(invoker: CommandInvoker, args: MutableList<String>): MutableList<String> {
+    override fun tabComplete(invoker: Invoker, args: MutableList<String>): MutableList<String> {
         return when (args.size) {
             0, 1 -> {
                 val list: MutableList<String> = mutableListOf("off", "on")

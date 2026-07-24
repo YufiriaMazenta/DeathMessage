@@ -1,19 +1,19 @@
 package pers.yufiria.deathmsg.util
 
+import crypticlib.BukkitPlayer
 import crypticlib.chat.BukkitMsgSender
-import crypticlib.lifecycle.BukkitLifeCycleTask
 import crypticlib.lifecycle.LifeCycle
+import crypticlib.lifecycle.LifeCycleTask
 import crypticlib.lifecycle.LifeCycleTaskSettings
 import crypticlib.lifecycle.TaskRule
 import org.bukkit.NamespacedKey
 import org.bukkit.entity.Player
 import org.bukkit.persistence.PersistentDataType
-import org.bukkit.plugin.Plugin
 import pers.yufiria.deathmsg.DEATH_MESSAGE
 import pers.yufiria.deathmsg.config.Configs
 
 @LifeCycleTaskSettings(rules = [TaskRule(lifeCycle = LifeCycle.ENABLE)])
-object PlayerUtil: BukkitLifeCycleTask {
+object PlayerUtil: LifeCycleTask {
 
     private lateinit var deathMessageFilterKey: NamespacedKey
 
@@ -29,13 +29,13 @@ object PlayerUtil: BukkitLifeCycleTask {
     fun Player.setFilterOn() {
         val dataContainer = this.persistentDataContainer
         dataContainer[deathMessageFilterKey, PersistentDataType.BYTE] = 1.toByte()
-        BukkitMsgSender.INSTANCE.sendMsg(player, Configs.pluginMessageFilterOn.value())
+        BukkitMsgSender.INSTANCE.sendMsg(BukkitPlayer.byPlayer(player), Configs.pluginMessageFilterOn.value())
     }
 
     fun Player.setFilterOff() {
         val dataContainer = this.persistentDataContainer
         dataContainer[deathMessageFilterKey, PersistentDataType.BYTE] = 0.toByte()
-        BukkitMsgSender.INSTANCE.sendMsg(player, Configs.pluginMessageFilterOff.value())
+        BukkitMsgSender.INSTANCE.sendMsg(BukkitPlayer.byPlayer(player), Configs.pluginMessageFilterOff.value())
     }
 
 
@@ -45,7 +45,7 @@ object PlayerUtil: BukkitLifeCycleTask {
         return filterFlag != null && filterFlag.toInt() != 0
     }
 
-    override fun lifecycle(p0: Plugin?, p1: LifeCycle?) {
+    override fun lifecycle(p0: Any, p1: LifeCycle?) {
         deathMessageFilterKey = NamespacedKey(DEATH_MESSAGE, "death_msg_filter")
     }
 

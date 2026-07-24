@@ -3,12 +3,12 @@ import java.text.SimpleDateFormat
 plugins {
     `java-library`
     `maven-publish`
-    id("com.github.johnrengelman.shadow").version("7.1.2")
-    kotlin("jvm") version "1.9.20"
+    id("io.github.goooler.shadow").version("8.1.7")
+    id("org.jetbrains.kotlin.jvm") version "2.4.20-Beta2"
 }
 
 group = "pers.yufiria"
-version = "1.4.2"
+version = rootProject.findProperty("pluginVer").toString()
 
 repositories {
     mavenLocal()
@@ -21,20 +21,18 @@ repositories {
     maven("https://mvn.lumine.io/repository/maven-public/")
     maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
     //CrypticLib
-    maven("http://110.42.10.241:8082/repository/maven-public/") {
-        isAllowInsecureProtocol = true
-    }
+    maven("https://repo.crypticlib.incrafttime.top/repository/maven-public/")
     mavenCentral()
 }
 
 dependencies {
-    compileOnly("org.spigotmc:spigot:1.19-R0.1-SNAPSHOT")
+//    compileOnly("io.papermc.paper:paper-core:1.21.11")
     compileOnly("net.luckperms:api:5.4")
     compileOnly("me.clip:placeholderapi:2.11.6")
     compileOnly("io.lumine:Mythic-Dist:5.3.5")
     compileOnly("io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT")
-    implementation("com.crypticlib:bukkit:1.13.15.2")
-    implementation(kotlin("stdlib-jdk8"))
+    implementation("com.crypticlib:bukkit:${rootProject.property("crypticlibVer")}")
+    compileOnly(kotlin("stdlib"))
 }
 
 publishing {
@@ -61,7 +59,7 @@ tasks {
     shadowJar {
         archiveFileName.set("DeathMessage-$version.jar")
         relocate("crypticlib", "pers.yufiria.deathmsg.crypticlib")
-        relocate("kotlin", "kotlin1920")
+        relocate("kotlin", "kotlin2420")
         relocate("org.intellij.lang.annotations", "pers.yufiria.deathmsg.libs.intellij.lang.annotations")
         relocate("org.jetbrains.annotations", "pers.yufiria.deathmsg.libs.jetbrains.annotations")
     }

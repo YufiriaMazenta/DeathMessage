@@ -8,7 +8,6 @@ import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import pers.yufiria.deathmsg.config.Configs
 import pers.yufiria.deathmsg.event.DeathMessageSendEvent
-import pers.yufiria.deathmsg.util.PlayerUtil
 import pers.yufiria.deathmsg.util.PlayerUtil.isPlayerDeathMsgFilterOn
 
 @EventListener

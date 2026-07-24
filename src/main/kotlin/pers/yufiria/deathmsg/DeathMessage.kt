@@ -2,11 +2,24 @@ package pers.yufiria.deathmsg
 
 import crypticlib.BukkitPlugin
 import crypticlib.chat.BukkitMsgSender
+import crypticlib.dependency.Dependency
+import crypticlib.dependency.DependencyLoader
 import crypticlib.util.IOHelper
 import org.bukkit.Bukkit
 
 class DeathMessage: BukkitPlugin() {
 
+    init {
+        DependencyLoader.INSTANCE.loadDependency(
+            Dependency
+                .builder("org.jetbrains.kot#lin", "kot#lin-stdlib", "2.4.20-Beta2")
+                .test("!kot#lin%Kot#linVersion")
+                .relocate("kot#lin", "kot#lin2420")
+                .relocate("org%intellij%lang%annotations", "pers%yufiria%deathmsg%libs%intellij%lang%annotations")
+                .relocate("org%jetbrains%annotations", "pers%yufiria%deathmsg%libs%jetbrains%annotations")
+                .build()
+        )
+    }
 
     override fun whenEnable() {
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {

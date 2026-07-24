@@ -3,7 +3,7 @@ package pers.yufiria.deathmsg.commands
 import crypticlib.chat.BukkitMsgSender
 import crypticlib.command.BukkitCommand
 import crypticlib.command.CommandInfo
-import crypticlib.command.CommandInvoker
+import crypticlib.Invoker
 import crypticlib.command.CommandTree
 import crypticlib.command.annotation.Command
 import crypticlib.perm.PermInfo
@@ -21,7 +21,7 @@ object DeathMessageReloadCommand : CommandTree(
     )
 ) {
 
-    override fun execute(invoker: CommandInvoker, args: MutableList<String>) {
+    override fun execute(invoker: Invoker, args: MutableList<String>) {
         if (args.isNotEmpty()) {
             return
         }
