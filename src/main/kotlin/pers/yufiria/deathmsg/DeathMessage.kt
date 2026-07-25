@@ -12,9 +12,9 @@ class DeathMessage: BukkitPlugin() {
     init {
         DependencyLoader.INSTANCE.loadDependency(
             Dependency
-                .builder("org.jetbrains.kot#lin", "kot#lin-stdlib", "2.4.10")
+                .builder("org.jetbrains.kot#lin", "kot#lin-stdlib", "2.4.20-Beta2")
                 .test("!kot#lin2410%Kot#linVersion")
-                .relocate("kot#lin", "kot#lin2410")
+                .relocate("kot#lin", "kot#lin2420")
                 .relocate("org%intellij%lang%annotations", "pers%yufiria%deathmsg%libs%intellij%lang%annotations")
                 .relocate("org%jetbrains%annotations", "pers%yufiria%deathmsg%libs%jetbrains%annotations")
                 .build()
