@@ -13,6 +13,8 @@ class DeathMessage: BukkitPlugin() {
         DependencyLoader.INSTANCE.loadDependency(
             Dependency
                 .builder("org.jetbrains.kot#lin", "kot#lin-stdlib", "2.4.20-Beta2")
+                .repository(Dependency.REPOSITORY_MAVEN_CENTRAL_MIRROR_ALI)
+                .repository(Dependency.REPOSITORY_MAVEN_CENTRAL)
                 .test("!kot#lin2420%Kot#linVersion")
                 .relocate("kot#lin", "kot#lin2420")
                 .relocate("org%intellij%lang%annotations", "pers%yufiria%deathmsg%libs%intellij%lang%annotations")
