@@ -2,13 +2,12 @@ name: DeathMessage
 author: YufiriaMazenta
 main: pers.yufiria.deathmsg.DeathMessage
 version: ${version}
-api-version: 1.19
+api-version: 1.17
 load: POSTWORLD
 soft-depend: [ PlaceholderAPI ]
 folia-supported: true
-dependencies:
-  server:
-    PlaceholderAPI:
-      load: AFTER
-      required: false
-      join-classpath: true
+permissions:
+  deathmessage.command.filter:
+    default: true
+  deathmessage.perm.default:
+    default: true
