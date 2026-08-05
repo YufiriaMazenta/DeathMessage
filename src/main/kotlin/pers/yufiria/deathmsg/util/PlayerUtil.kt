@@ -1,19 +1,20 @@
 package pers.yufiria.deathmsg.util
 
 import crypticlib.BukkitPlayer
+import crypticlib.CrypticLibPlugin
 import crypticlib.chat.BukkitMsgSender
-import crypticlib.lifecycle.LifeCycle
-import crypticlib.lifecycle.LifeCycleTask
-import crypticlib.lifecycle.LifeCycleTaskSettings
-import crypticlib.lifecycle.TaskRule
+import crypticlib.lifecycle.Lifecycle
+import crypticlib.lifecycle.LifecycleRule
+import crypticlib.lifecycle.LifecycleTask
+import crypticlib.lifecycle.LifecycleTaskSettings
 import org.bukkit.NamespacedKey
 import org.bukkit.entity.Player
 import org.bukkit.persistence.PersistentDataType
 import pers.yufiria.deathmsg.DEATH_MESSAGE
 import pers.yufiria.deathmsg.config.Configs
 
-@LifeCycleTaskSettings(rules = [TaskRule(lifeCycle = LifeCycle.ENABLE)])
-object PlayerUtil: LifeCycleTask {
+@LifecycleTaskSettings(rules = [LifecycleRule(lifeCycle = Lifecycle.ENABLE)])
+object PlayerUtil: LifecycleTask {
 
     private lateinit var deathMessageFilterKey: NamespacedKey
 
@@ -45,7 +46,7 @@ object PlayerUtil: LifeCycleTask {
         return filterFlag != null && filterFlag.toInt() != 0
     }
 
-    override fun lifecycle(p0: Any, p1: LifeCycle?) {
+    override fun lifecycle(plugin: CrypticLibPlugin, lifecycle: Lifecycle) {
         deathMessageFilterKey = NamespacedKey(DEATH_MESSAGE, "death_msg_filter")
     }
 

@@ -1,5 +1,6 @@
 package pers.yufiria.deathmsg.config
 
+import crypticlib.CrypticLibPlugin
 import crypticlib.lifecycle.*
 import crypticlib.util.YamlConfigHelper
 import org.bukkit.entity.Player
@@ -7,13 +8,13 @@ import org.bukkit.plugin.Plugin
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
-@LifeCycleTaskSettings(
+@LifecycleTaskSettings(
     rules = [
-        TaskRule(lifeCycle = LifeCycle.ENABLE),
-        TaskRule(lifeCycle = LifeCycle.RELOAD)
+        LifecycleRule(lifeCycle = Lifecycle.ENABLE),
+        LifecycleRule(lifeCycle = Lifecycle.RELOAD)
     ]
 )
-object DeathMessagesConfig: LifeCycleTask {
+object DeathMessagesConfig: LifecycleTask {
 
     private val deathMsgMap: MutableMap<String, List<*>> = ConcurrentHashMap()
     private var random: Random = Random()
@@ -50,7 +51,7 @@ object DeathMessagesConfig: LifeCycleTask {
         return null
     }
 
-    override fun lifecycle(plugin: Any, lifeCycle: LifeCycle?) {
+    override fun lifecycle(plugin: CrypticLibPlugin, lifeCycle: Lifecycle) {
         deathMsgMap.clear()
         val deathMessagesConfig = Configs.deathMessages.value()
         for (key in deathMessagesConfig.getKeys(false)) {

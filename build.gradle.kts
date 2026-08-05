@@ -21,7 +21,7 @@ repositories {
     maven("https://mvn.lumine.io/repository/maven-public/")
     maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
     //CrypticLib
-    maven("https://repo.crypticlib.incrafttime.top/repository/maven-public/")
+    maven("https://repo.crypticlib.com/repository/maven-public/")
     mavenCentral()
 }
 

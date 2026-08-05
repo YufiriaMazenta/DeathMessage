@@ -1,10 +1,11 @@
 package pers.yufiria.deathmsg.sync
 
 import com.google.common.io.ByteStreams
-import crypticlib.lifecycle.LifeCycle
-import crypticlib.lifecycle.LifeCycleTask
-import crypticlib.lifecycle.LifeCycleTaskSettings
-import crypticlib.lifecycle.TaskRule
+import crypticlib.CrypticLibPlugin
+import crypticlib.lifecycle.Lifecycle
+import crypticlib.lifecycle.LifecycleRule
+import crypticlib.lifecycle.LifecycleTask
+import crypticlib.lifecycle.LifecycleTaskSettings
 import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.plugin.messaging.PluginMessageListener
@@ -15,8 +16,8 @@ import java.io.ByteArrayInputStream
 import java.io.DataInputStream
 import java.io.IOException
 
-@LifeCycleTaskSettings(rules = [TaskRule(lifeCycle = LifeCycle.ENABLE)])
-object DataReceiver: PluginMessageListener, LifeCycleTask {
+@LifecycleTaskSettings(rules = [LifecycleRule(lifeCycle = Lifecycle.ENABLE)])
+object DataReceiver: PluginMessageListener, LifecycleTask {
 
     override fun onPluginMessageReceived(channel: String, player: Player, messages: ByteArray) {
         if (!Configs.proxy.value()) return
@@ -46,7 +47,7 @@ object DataReceiver: PluginMessageListener, LifeCycleTask {
 
     }
 
-    override fun lifecycle(plugin: Any, p1: LifeCycle) {
+    override fun lifecycle(plugin: CrypticLibPlugin, lifecycle: Lifecycle) {
         if (Configs.proxy.value()) {
             val pluginIns: JavaPlugin = plugin as JavaPlugin
             pluginIns.server.messenger.registerOutgoingPluginChannel(plugin, "BungeeCord")
